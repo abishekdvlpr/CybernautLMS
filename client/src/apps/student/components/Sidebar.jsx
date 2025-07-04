@@ -86,7 +86,7 @@ const Sidebar = ({ children, pageTitle }) => {
         ></div>
         <img
           src={bulbImg}
-          className="relative w-8 h-8 z-10 transition-all duration-300"
+          className="relative w-10 h-15 z-20 transition-all duration-300"
           alt="Toggle Theme"
         />
       </div>

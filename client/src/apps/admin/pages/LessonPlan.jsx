@@ -195,7 +195,7 @@ export default function LessonPlan() {
 
 {/* Latest note display */}
 {notes.length > 0 && (
-  <div className="bg-white shadow-sm border rounded-xl p-6 mb-8">
+  <div className="bg-white shadow-sm border rounded-xl p-6 mb-8 dark:bg-blue-200">
     <div className="flex justify-between items-center">
       <h3 className="text-lg font-semibold text-gray-800">Day {notes[0].day}: {notes[0].title}</h3>
       <a
@@ -243,7 +243,7 @@ export default function LessonPlan() {
   {notes.slice(1).map(note => (
     <div
       key={note._id}
-      className="bg-white p-5 rounded-lg border hover:shadow-sm cursor-pointer"
+      className="bg-white p-5 rounded-lg border hover:shadow-sm cursor-pointer dark:bg-blue-200 text-black"
       onClick={() => setNotes(prev => {
         const updated = [...prev];
         const idx = updated.findIndex(n => n._id === note._id);
@@ -257,7 +257,7 @@ export default function LessonPlan() {
       <div className="flex justify-between items-center">
         <div>
           <p className="font-semibold text-gray-800">Day {note.day}: {note.title}</p>
-          <p className="text-xs text-gray-400">{new Date(note.createdAt).toLocaleDateString()}</p>
+          <p className="text-xs text-gray-600">{new Date(note.createdAt).toLocaleDateString()}</p>
         </div>
         <div className="flex flex-col gap-2 items-end">
           <button
@@ -304,7 +304,7 @@ export default function LessonPlan() {
 
       {/* Add/Edit Note Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-start pt-20 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-start pt-20 z-50 dark:bg-black text-black">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl p-8 relative">
             <button
               className="absolute top-4 right-4 text-gray-600 hover:text-black text-xl"
