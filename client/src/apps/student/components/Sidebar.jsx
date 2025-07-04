@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import Topbar from "./Topbar";
+import bulbImg from '@shared/bulb.png';
 
 const Sidebar = ({ children, pageTitle }) => {
   const navigate = useNavigate();
@@ -19,6 +20,19 @@ const Sidebar = ({ children, pageTitle }) => {
 
   const [student, setStudent] = useState(null);
   const [batchId, setBatchId] = useState(null);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -26,7 +40,7 @@ const Sidebar = ({ children, pageTitle }) => {
         const token = localStorage.getItem("token");
         if (!token) return navigate("/");
 
-        const res = await axios.get("http://localhost:5000/auth/student/me", {
+        const res = await axios.get("http://localhost:5004/auth/student/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -46,7 +60,7 @@ const Sidebar = ({ children, pageTitle }) => {
     const token = localStorage.getItem("token");
     try {
       await axios.post(
-        "http://localhost:5000/auth/logout",
+        "http://localhost:5004/auth/logout",
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -59,23 +73,40 @@ const Sidebar = ({ children, pageTitle }) => {
   };
 
   return (
-    <div className="flex h-screen bg-[#f4f7fa]">
+    <div className="flex h-screen bg-white dark:bg-black text-black dark:text-white">
+      {/* Theme Toggle Button */}
+      <div
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 cursor-pointer transition-all duration-300 hover:scale-110"
+        onClick={() => setDarkMode(!darkMode)}
+      >
+        <div
+          className={`absolute inset-0 rounded-full transition-all duration-500 ${
+            !darkMode ? "bg-yellow-300 blur-2xl opacity-60 scale-125" : "bg-gray-600 opacity-20 scale-110"
+          }`}
+        ></div>
+        <img
+          src={bulbImg}
+          className="relative w-8 h-8 z-10 transition-all duration-300"
+          alt="Toggle Theme"
+        />
+      </div>
+
       {/* Sidebar */}
-      <div className="flex flex-col w-64 bg-white border-r border-gray-200 shadow-sm relative">
+      <div className="flex flex-col w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-sm relative">
         {/* Profile */}
-        <div className="border-b border-gray-200 h-20 flex items-center px-4 py-6">
-          <div className="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3 rounded-xl border border-blue-100 w-full">
+        <div className="border-b border-gray-200 dark:border-gray-700 h-20 flex items-center px-4 py-6">
+          <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-800 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 w-full">
             <div className="relative">
               <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white shadow-sm">
                 <FaUserCircle className="text-lg" />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></div>
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-gray-900">
+              <p className="text-sm font-semibold text-black dark:text-white">
                 {student?.user?.name || "Student"}
               </p>
-              <p className="text-xs text-gray-500 font-medium">{student?.user?.email}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{student?.user?.email}</p>
             </div>
           </div>
         </div>
@@ -88,8 +119,8 @@ const Sidebar = ({ children, pageTitle }) => {
             className={({ isActive }) =>
               `flex items-center gap-4 px-4 py-3 my-1 rounded-xl transition-all duration-200 ease-in-out ${
                 isActive
-                  ? "bg-gray-900 text-white shadow-lg"
-                  : "hover:bg-blue-50 text-gray-700 hover:shadow-sm"
+                  ? "bg-blue-700 text-white shadow-lg"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white"
               }`
             }
           >
@@ -104,8 +135,8 @@ const Sidebar = ({ children, pageTitle }) => {
                 className={({ isActive }) =>
                   `flex items-center gap-4 px-4 py-3 my-1 rounded-xl transition-all duration-200 ease-in-out ${
                     isActive
-                      ? "bg-gray-900 text-white shadow-lg"
-                      : "hover:bg-blue-50 text-gray-700 hover:shadow-sm"
+                      ? "bg-blue-700 text-white shadow-lg"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white"
                   }`
                 }
               >
@@ -118,8 +149,8 @@ const Sidebar = ({ children, pageTitle }) => {
                 className={({ isActive }) =>
                   `flex items-center gap-4 px-4 py-3 my-1 rounded-xl transition-all duration-200 ease-in-out ${
                     isActive
-                      ? "bg-gray-900 text-white shadow-lg"
-                      : "hover:bg-blue-50 text-gray-700 hover:shadow-sm"
+                      ? "bg-blue-700 text-white shadow-lg"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white"
                   }`
                 }
               >
@@ -132,8 +163,8 @@ const Sidebar = ({ children, pageTitle }) => {
                 className={({ isActive }) =>
                   `flex items-center gap-4 px-4 py-3 my-1 rounded-xl transition-all duration-200 ease-in-out ${
                     isActive
-                      ? "bg-gray-900 text-white shadow-lg"
-                      : "hover:bg-blue-50 text-gray-700 hover:shadow-sm"
+                      ? "bg-blue-700 text-white shadow-lg"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white"
                   }`
                 }
               >
@@ -148,8 +179,8 @@ const Sidebar = ({ children, pageTitle }) => {
             className={({ isActive }) =>
               `flex items-center gap-4 px-4 py-3 my-1 rounded-xl transition-all duration-200 ease-in-out ${
                 isActive
-                  ? "bg-gray-900 text-white shadow-lg"
-                  : "hover:bg-blue-50 text-gray-700 hover:shadow-sm"
+                  ? "bg-blue-700 text-white shadow-lg"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white"
               }`
             }
           >
@@ -159,10 +190,10 @@ const Sidebar = ({ children, pageTitle }) => {
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 text-base font-semibold text-red-600 hover:text-white hover:bg-gradient-to-r hover:from-red-600 hover:to-red-700 border-2 border-red-600 rounded-xl transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-red-600/25 transform hover:scale-105"
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 text-base font-semibold text-red-600 dark:text-red-500 hover:text-white hover:bg-red-600 border-2 border-red-600 rounded-xl transition-all duration-300 hover:shadow-lg transform hover:scale-105"
           >
             <FaSignOutAlt className="text-xl" />
             <span className="tracking-wide">Sign Out</span>
@@ -171,9 +202,9 @@ const Sidebar = ({ children, pageTitle }) => {
       </div>
 
       {/* Main Content with Topbar */}
-      <div className="flex-1 overflow-y-auto bg-[#f8fafc]">
+      <div className="flex-1 flex flex-col h-full bg-white dark:bg-black text-blue">
         <Topbar pageTitle={pageTitle} userName={student?.user?.name || "Student"} />
-        <div className="pt-4 px-6 pb-6">{children}</div>
+        <div className="flex-1 overflow-y-auto">{children}</div>
       </div>
     </div>
   );

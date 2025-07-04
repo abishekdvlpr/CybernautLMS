@@ -35,7 +35,7 @@ const AdminLayout = ({ children }) => {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/auth/logout", {
+      await axios.post("http://localhost:5004/auth/logout", {
         headers: { Authorization: `Bearer ${token}` },
       });
       localStorage.removeItem("token");

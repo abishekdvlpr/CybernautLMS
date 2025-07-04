@@ -17,7 +17,7 @@ const PrivateRoute = ({ children }) => {
       }
 
       try {
-        await axios.get('http://localhost:5000/auth/verify', {
+        await axios.get('http://localhost:5004/auth/verify', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -3,7 +3,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 
-const socket = io("http://localhost:5004");
+const socket = io("http://localhost:5006");
 
 export default function AdminChat() {
   const { batchId } = useParams();
@@ -55,7 +55,7 @@ export default function AdminChat() {
     const fetchStudents = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5004/chatrooms/${course}/${batch}/admins/${encodeURIComponent(sender.trim())}/students`
+          `http://localhost:5006/chatrooms/${course}/${batch}/admins/${encodeURIComponent(sender.trim())}/students`
         );
         setStudents(res.data);
       } catch (err) {

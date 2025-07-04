@@ -17,7 +17,7 @@ function StudentProfile() {
 
   const changePassword = async () => {
     try {
-      await axios.post('http://localhost:5000/auth/change-password', {
+      await axios.post('http://localhost:5004/auth/change-password', {
         username: userData.username,
         newPassword,
       });

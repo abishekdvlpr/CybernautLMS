@@ -6,14 +6,36 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 const server = http.createServer(app);
 const io = socketIO(server, {
-  cors: { origin: '*' }
+  cors: { 
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
 });
 
-const PORT = 5004;
+const PORT = 5006;
 const LOG_DIR = path.join(__dirname, 'chat_logs');
 
 if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR);

@@ -119,28 +119,28 @@ const filterStudents = () => {
 
 
   return (
-    <div className="p-4 bg-gradient-to-br from-white via-blue-50 to-white min-h-[90%]">
+    <div className="p-4 bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-[90%]">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Student Management</h1>
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Student Management</h1>
       </div>
 
       {/* Summary Card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-        <div className="bg-white rounded shadow p-4 text-center">
-          <h4 className="text-sm text-gray-500">Total Students</h4>
-          <p className="text-xl font-semibold">{filteredStudents.length}</p>
+        <div className="bg-white dark:bg-gray-800 rounded shadow p-4 text-center border dark:border-gray-700">
+          <h4 className="text-sm text-gray-500 dark:text-gray-400">Total Students</h4>
+          <p className="text-xl font-semibold text-gray-900 dark:text-white">{filteredStudents.length}</p>
         </div>
       </div>
 
       {/* Filter & Search */}
-      <div className="bg-white p-4 rounded shadow">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded shadow border dark:border-gray-700">
         <div className="flex justify-between items-center mb-4 gap-4">
           <input
             type="text"
             placeholder="Search students..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="flex-1 px-4 py-2 rounded border bg-white"
+            className="flex-1 px-4 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
           />
           <div className="flex items-center gap-4">
   {/* Course Dropdown */}
@@ -148,14 +148,14 @@ const filterStudents = () => {
     <select
       value={selectedCourse}
       onChange={(e) => setSelectedCourse(e.target.value)}
-      className="appearance-none px-4 py-2 pr-8 rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="appearance-none px-4 py-2 pr-8 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
       <option value="All">All Courses</option>
       {uniqueCourses.map((course, idx) => (
         <option key={idx} value={course}>{course}</option>
       ))}
     </select>
-    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500">
+    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400">
       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
       </svg>
@@ -167,14 +167,14 @@ const filterStudents = () => {
     <select
       value={selectedBatch}
       onChange={(e) => setSelectedBatch(e.target.value)}
-      className="appearance-none px-4 py-2 pr-8 rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="appearance-none px-4 py-2 pr-8 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
       <option value="All">All Batches</option>
       {filteredBatches.map((batch, idx) => (
         <option key={idx} value={batch}>{batch}</option>
       ))}
     </select>
-    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500">
+    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400">
       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
       </svg>
@@ -186,14 +186,14 @@ const filterStudents = () => {
     <select
       value={selectedYear}
       onChange={(e) => setSelectedYear(e.target.value)}
-      className="appearance-none px-4 py-2 pr-8 rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="appearance-none px-4 py-2 pr-8 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
       <option value="All">All Years</option>
       {uniqueYears.map((year, idx) => (
         <option key={idx} value={year}>20{year}</option>
       ))}
     </select>
-    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500">
+    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-400">
       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
       </svg>
@@ -205,7 +205,7 @@ const filterStudents = () => {
 
         {/* Table */}
         <table className="w-full text-sm text-left">
-          <thead className="text-gray-500 border-b">
+          <thead className="text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-600">
             <tr>
               <th className="py-2">Student Name</th>
               <th>Email</th>
@@ -215,10 +215,10 @@ const filterStudents = () => {
               <th>DOB</th>
             </tr>
           </thead>
-          <tbody className="text-gray-700">
+          <tbody className="text-gray-700 dark:text-gray-300">
   {filteredStudents.length > 0 ? (
     filteredStudents.map((student, idx) => (
-      <tr key={idx} className="border-t hover:bg-gray-50">
+      <tr key={idx} className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
         <td className="py-3">{student.user?.name}</td>
         <td>{student.user?.email}</td>
         <td>{student.course}</td>
@@ -229,7 +229,7 @@ const filterStudents = () => {
     ))
   ) : (
     <tr>
-      <td colSpan="6" className="text-center py-4 text-gray-500">
+      <td colSpan="6" className="text-center py-4 text-gray-500 dark:text-gray-400">
         No students found.
       </td>
     </tr>

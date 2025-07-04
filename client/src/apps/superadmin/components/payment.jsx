@@ -77,26 +77,26 @@ const Payment = () => {
   };
 
   return (
-    <div className="p-2 bg-gradient-to-br from-white via-blue-50 to-white md:p-4">
+    <div className="p-2 bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 md:p-4">
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white h-30 border border-blue-100 rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
-          <h3 className="text-lg font-semibold text-blue-900">Total Revenue</h3>
-          <p className="text-2xl font-bold text-blue-700 mt-2">₹{stats.totalRevenue}</p>
+        <div className="bg-white dark:bg-gray-800 h-30 border border-blue-100 dark:border-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
+          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300">Total Revenue</h3>
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-2">₹{stats.totalRevenue}</p>
         </div>
-        <div className="bg-white h-30 border border-blue-100 rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
-          <h3 className="text-lg font-semibold text-blue-900">Pending Payments</h3>
-          <p className="text-2xl font-bold text-blue-700 mt-2">{stats.pendingPayments}</p>
+        <div className="bg-white dark:bg-gray-800 h-30 border border-blue-100 dark:border-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
+          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300">Pending Payments</h3>
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-2">{stats.pendingPayments}</p>
         </div>
-        <div className="bg-white h-30 border border-blue-100 rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
-          <h3 className="text-lg font-semibold text-blue-900">Success Rate</h3>
-          <p className="text-2xl font-bold text-blue-700 mt-2">
+        <div className="bg-white dark:bg-gray-800 h-30 border border-blue-100 dark:border-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
+          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300">Success Rate</h3>
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-2">
             {((stats.successfulPayments / (stats.successfulPayments + stats.failedPayments || 1)) * 100).toFixed(1)}%
           </p>
         </div>
-        <div className="bg-white h-30 border border-blue-100 rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
-          <h3 className="text-lg font-semibold text-blue-900">Failed Payments</h3>
-          <p className="text-2xl font-bold text-blue-700 mt-2">{stats.failedPayments}</p>
+        <div className="bg-white dark:bg-gray-800 h-30 border border-blue-100 dark:border-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition">
+          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300">Failed Payments</h3>
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-2">{stats.failedPayments}</p>
         </div>
       </div>
 
@@ -110,7 +110,7 @@ const Payment = () => {
           className={`px-4 py-2 rounded-full text-sm font-medium ${
             view === "salary"
               ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
           }`}
         >
           Monthly Salary Payments
@@ -123,7 +123,7 @@ const Payment = () => {
           className={`px-4 py-2 rounded-full text-sm font-medium ${
             view === "transactions"
               ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
           }`}
         >
           Recent Transactions
@@ -132,11 +132,11 @@ const Payment = () => {
 
       {/* Salary View */}
       {view === "salary" && (
-        <div className="bg-white p-4 rounded shadow mb-6">
-          <h2 className="text-lg font-semibold mb-2">Monthly Salary Payments</h2>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow mb-6 border dark:border-gray-700">
+          <h2 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Monthly Salary Payments</h2>
           <table className="w-full text-left text-sm border-separate border-spacing-y-3">
             <thead>
-              <tr className="text-gray-500">
+              <tr className="text-gray-500 dark:text-gray-400">
                 <th>Lecturer</th>
                 <th>Amount</th>
                 <th>Status</th>
@@ -145,20 +145,20 @@ const Payment = () => {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody className="text-gray-700">
+            <tbody className="text-gray-700 dark:text-gray-300">
               {admins.map((admin, idx) => {
                 const isPaid = admin.paidForMonth === currentMonth;
                 const status = isPaid ? "Paid" : "Pending";
                 return (
-                  <tr key={idx} className="bg-white shadow-sm rounded-md">
+                  <tr key={idx} className="bg-white dark:bg-gray-700 shadow-sm rounded-md">
                     <td className="py-3 px-2">{admin.user?.name || "Unnamed"}</td>
-                    <td className="py-3 px-2 text-green-600 font-semibold">₹{admin.salary}</td>
+                    <td className="py-3 px-2 text-green-600 dark:text-green-400 font-semibold">₹{admin.salary}</td>
                     <td className="py-3 px-2">
                       <span
                         className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full ${
                           isPaid
-                            ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
+                            ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300"
+                            : "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300"
                         }`}
                       >
                         <img
@@ -174,7 +174,7 @@ const Payment = () => {
                     <td className="py-3 px-2">
                       {!isPaid && (
                         <button
-                          className="bg-black text-white px-2 py-1 text-xs rounded"
+                          className="bg-black dark:bg-gray-600 text-white px-2 py-1 text-xs rounded hover:bg-gray-800 dark:hover:bg-gray-500"
                           onClick={() => handleApprovePayment(admin)}
                         >
                           Approve
@@ -184,7 +184,7 @@ const Payment = () => {
                         <a
                           href={`http://localhost:5001/api/salary/invoice/${admin.invoiceId}`}
                           target="_blank"
-                          className="ml-2 text-blue-600 underline text-xs"
+                          className="ml-2 text-blue-600 dark:text-blue-400 underline text-xs hover:text-blue-800 dark:hover:text-blue-300"
                         >
                           View Invoice
                         </a>
@@ -200,21 +200,21 @@ const Payment = () => {
 
       {/* Transactions View */}
       {view === "transactions" && (
-  <div className="bg-white p-4 rounded shadow">
+  <div className="bg-white dark:bg-gray-800 p-4 rounded shadow border dark:border-gray-700">
     <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-3">
-      <h2 className="text-lg font-semibold">Recent Transactions</h2>
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Transactions</h2>
 
       <div className="flex flex-col md:flex-row gap-3 items-center">
         <input
           type="text"
-          className="border px-2 py-1 rounded text-sm"
+          className="border border-gray-300 dark:border-gray-600 px-2 py-1 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
           placeholder="Search by ID, method, status"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
 
         <select
-          className="border px-2 py-1 rounded text-sm"
+          className="border border-gray-300 dark:border-gray-600 px-2 py-1 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           onChange={(e) => fetchTransactions(Number(e.target.value))}
         >
           <option value="5">Last 5</option>
@@ -225,7 +225,7 @@ const Payment = () => {
     </div>
 
     <table className="w-full text-sm border-separate border-spacing-y-2">
-      <thead className="text-gray-500">
+      <thead className="text-gray-500 dark:text-gray-400">
         <tr>
           <th>Transaction ID</th>
           <th>Amount</th>
@@ -234,7 +234,7 @@ const Payment = () => {
           <th>Created At</th>
         </tr>
       </thead>
-      <tbody className="text-gray-700">
+      <tbody className="text-gray-700 dark:text-gray-300">
         {transactions
           .filter(tx =>
             tx.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -242,7 +242,7 @@ const Payment = () => {
             tx.status.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .map((tx, idx) => (
-            <tr key={idx} className="bg-gray-50 rounded">
+            <tr key={idx} className="bg-gray-50 dark:bg-gray-700 rounded">
               <td className="py-2 px-2">{tx.id}</td>
               <td className="py-2 px-2">₹{(tx.amount / 100).toFixed(2)}</td>
               <td className="py-2 px-2 capitalize">{tx.status}</td>

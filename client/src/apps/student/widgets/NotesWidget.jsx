@@ -40,30 +40,37 @@ function NotesWidget({ studentId }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-md shadow max-w-sm mx-auto mt-6">
-      <h3 className="text-xl font-semibold text-gray-700 mb-4">Your Reminders</h3>
-
-      <ul className="space-y-3 max-h-64 overflow-y-auto pr-2">
+    <div className="w-full">
+      <div className="space-y-3 max-h-80 overflow-y-auto">
         {missingNotes.length === 0 ? (
-          <li className="text-sm text-gray-400">No missing work 🎉</li>
+          <div className="text-center py-8">
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">🎉</span>
+            </div>
+            <p className="text-gray-500 dark:text-gray-400 font-medium">All caught up!</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">No pending work</p>
+          </div>
         ) : (
           missingNotes.map((note) => (
-            <li
+            <div
               key={note.id}
-              className="flex justify-between items-start p-3 border rounded-md bg-gray-50"
+              className="flex items-start gap-3 p-4 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-lg border border-red-200 dark:border-red-800"
             >
-              <span className="text-sm text-gray-800 break-words">{note.text}</span>
+              <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-gray-800 dark:text-gray-200 font-medium break-words">{note.text}</p>
+              </div>
               <button
                 onClick={() => deleteNote(note.id)}
-                className="text-red-500 hover:text-red-700 ml-2"
+                className="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 rounded transition-colors flex-shrink-0"
                 title="Dismiss"
               >
-                <FaTrash />
+                <FaTrash className="w-3 h-3" />
               </button>
-            </li>
+            </div>
           ))
         )}
-      </ul>
+      </div>
     </div>
   );
 }

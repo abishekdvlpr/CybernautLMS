@@ -96,7 +96,7 @@ const Settings = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        "http://localhost:5000/auth/change-password",
+        "http://localhost:5004/auth/change-password",
         passwordForm,
         { headers: { Authorization: `Bearer ${token}` } }
       );

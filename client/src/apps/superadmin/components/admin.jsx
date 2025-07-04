@@ -114,9 +114,9 @@ const handleCancelDelete = () => {
   );
 
   return (
-    <div className="p-2 h-[89vh] bg-gradient-to-br from-white via-blue-50 to-white">
+    <div className="p-2 h-[89vh] bg-gray-50 dark:bg-gray-900">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Admin Management</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Admin Management</h2>
         <button
           onClick={() => setShowModal(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center"
@@ -128,7 +128,7 @@ const handleCancelDelete = () => {
       <input
         type="text"
         placeholder="Search lecturers..."
-        className="border px-4 py-2 rounded w-full mb-6"
+        className="border border-gray-300 dark:border-gray-600 px-4 py-2 rounded w-full mb-6 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -137,20 +137,20 @@ const handleCancelDelete = () => {
         {filteredAdmins.map((admin) => (
           <div
             key={admin._id}
-            className="bg-white border border-gray-200 p-6 rounded-lg shadow hover:shadow-md transition"
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 rounded-lg shadow hover:shadow-md transition"
           >
-            <h3 className="text-xl font-semibold text-gray-800">{admin.user?.name}</h3>
-            <p className="text-gray-600">{admin.specialisation?.join(', ')}</p>
-            <div className="mt-2 text-sm text-gray-700 space-y-1">
-              <div><FaEnvelope className="inline mr-2 text-gray-500" /> {admin.user?.email}</div>
-              <div><FaPhone className="inline mr-2 text-gray-500" /> {admin.phone}</div>
-              <div><FaChalkboardTeacher className="inline mr-2 text-gray-500" /> {admin.batchCount || 0} Batches</div>
+            <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{admin.user?.name}</h3>
+            <p className="text-gray-600 dark:text-gray-400">{admin.specialisation?.join(', ')}</p>
+            <div className="mt-2 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+              <div><FaEnvelope className="inline mr-2 text-gray-500 dark:text-gray-400" /> {admin.user?.email}</div>
+              <div><FaPhone className="inline mr-2 text-gray-500 dark:text-gray-400" /> {admin.phone}</div>
+              <div><FaChalkboardTeacher className="inline mr-2 text-gray-500 dark:text-gray-400" /> {admin.batchCount || 0} Batches</div>
             </div>
             <div className="flex justify-between items-center mt-4 text-sm">
-              <span className="text-blue-600 font-bold">₹{admin.salary}</span>
+              <span className="text-blue-600 dark:text-blue-400 font-bold">₹{admin.salary}</span>
               <div className="space-x-4">
-                <button className="text-blue-500 hover:text-blue-700" onClick={() => handleEdit(admin)}><FaEdit /></button>
-                <button className="text-red-500 hover:text-red-700" onClick={() => confirmDelete(admin._id)}><FaTrash /></button>
+                <button className="text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300" onClick={() => handleEdit(admin)}><FaEdit /></button>
+                <button className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300" onClick={() => confirmDelete(admin._id)}><FaTrash /></button>
 
               </div>
             </div>

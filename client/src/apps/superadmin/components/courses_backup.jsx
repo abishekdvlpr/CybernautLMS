@@ -108,14 +108,14 @@ const Courses = () => {
       {/* Course Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map(course => (
-          <div key={course._id} className="border dark:border-gray-700 p-4 rounded-lg shadow bg-white dark:bg-gray-800">
+          <div key={course._id} className="border p-4 rounded-lg shadow bg-white">
             <div className="flex justify-between items-start">
               <div>
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{course.courseName}</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Modules: {course.modules.join(', ')}</p>
-                <p className="mt-2 text-sm text-gray-700 dark:text-gray-300"><strong>Students:</strong> {course.students}</p>
+                <h2 className="text-xl font-semibold text-gray-800">{course.courseName}</h2>
+                <p className="text-sm text-gray-500 mt-1">Modules: {course.modules.join(', ')}</p>
+                <p className="mt-2 text-sm text-gray-700"><strong>Students:</strong> {course.students}</p>
               </div>
-              <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-2 py-1 rounded-full">Active</span>
+              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Active</span>
             </div>
             <div className="flex justify-end gap-2 mt-4">
               <button

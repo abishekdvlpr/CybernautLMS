@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5004");
+const socket = io("http://localhost:5006");
 
 export default function SuperAdminChat() {
   const [sender, setSender] = useState("");
@@ -15,7 +15,7 @@ export default function SuperAdminChat() {
     const fetchAdmin = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/auth/admin/me", {
+        const res = await axios.get("http://localhost:5004/auth/admin/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const name = res.data.user.name;

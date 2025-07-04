@@ -226,17 +226,17 @@ const handleSave = async () => {
   );
 
   return (
-    <div className="p-4 bg-gradient-to-br from-white via-blue-50 to-white text-blue-900 h-[89vh] space-y-6">
-      <h1 className="text-2xl font-bold mb-2">Batch Management</h1>
+    <div className="p-4 bg-gray-50 dark:bg-gray-900 text-blue-900 dark:text-white h-[89vh] space-y-6">
+      <h1 className="text-2xl font-bold mb-2 dark:text-white">Batch Management</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="p-4 bg-white border shadow rounded-lg">
-          <h2 className="text-lg font-semibold text-gray-600">Total Batches</h2>
-          <p className="text-2xl mt-2 font-bold">{batches.length}</p>
+        <div className="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 shadow rounded-lg">
+          <h2 className="text-lg font-semibold text-gray-600 dark:text-gray-300">Total Batches</h2>
+          <p className="text-2xl mt-2 font-bold text-gray-900 dark:text-white">{batches.length}</p>
         </div>
-        <div className="p-4 bg-white border shadow rounded-lg">
-          <h2 className="text-lg font-semibold text-gray-600">Total Students</h2>
-          <p className="text-2xl mt-2 font-bold">{batches.reduce((acc, b) => acc + (b.studentCount || 0), 0)}</p>
+        <div className="p-4 bg-white dark:bg-gray-800 border dark:border-gray-700 shadow rounded-lg">
+          <h2 className="text-lg font-semibold text-gray-600 dark:text-gray-300">Total Students</h2>
+          <p className="text-2xl mt-2 font-bold text-gray-900 dark:text-white">{batches.reduce((acc, b) => acc + (b.studentCount || 0), 0)}</p>
         </div>
       </div>
 
@@ -245,14 +245,14 @@ const handleSave = async () => {
           placeholder="Search batches..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="border px-4 py-2 rounded w-full max-w-md"
+          className="border border-gray-300 dark:border-gray-600 px-4 py-2 rounded w-full max-w-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
         />
 
         <div className="flex gap-3">
           <select
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
-            className="border px-3 py-2 rounded"
+            className="border border-gray-300 dark:border-gray-600 px-3 py-2 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
             <option value="All">All Courses</option>
             {uniqueCourses.map((course, idx) => (
@@ -263,7 +263,7 @@ const handleSave = async () => {
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
-            className="border px-3 py-2 rounded"
+            className="border border-gray-300 dark:border-gray-600 px-3 py-2 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
             <option value="All">All Years</option>
             {uniqueYears.map((year, idx) => (
@@ -284,7 +284,7 @@ const handleSave = async () => {
   {filteredBatches.map(batch => {
     const isActive = new Date(batch.startDate) <= new Date();
     return (
-      <div key={batch._id} className="border rounded-xl shadow-md p-5 bg-white relative space-y-2">
+      <div key={batch._id} className="border border-gray-200 dark:border-gray-700 rounded-xl shadow-md p-5 bg-white dark:bg-gray-800 relative space-y-2">
         {/* Active Badge */}
         {isActive && (
           <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full shadow">
@@ -292,15 +292,15 @@ const handleSave = async () => {
           </div>
         )}
 
-        <h2 className="text-xl font-bold text-blue-800">{batch.batchName}</h2>
-        <p className="text-sm text-gray-600 font-medium">
-          <span className="text-gray-500 font-semibold">Course:</span> {batch.course?.courseName}
+        <h2 className="text-xl font-bold text-blue-800 dark:text-blue-300">{batch.batchName}</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+          <span className="text-gray-500 dark:text-gray-400 font-semibold">Course:</span> {batch.course?.courseName}
         </p>
-        <p className="text-sm text-gray-600 font-medium">
-          <span className="text-gray-500 font-semibold">Start Date:</span> {new Date(batch.startDate).toLocaleDateString()}
+        <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+          <span className="text-gray-500 dark:text-gray-400 font-semibold">Start Date:</span> {new Date(batch.startDate).toLocaleDateString()}
         </p>
-        <p className="text-sm text-gray-600 font-medium">
-          <span className="text-gray-500 font-semibold">Students:</span> {batch.studentCount}
+        <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+          <span className="text-gray-500 dark:text-gray-400 font-semibold">Students:</span> {batch.studentCount}
         </p>
         
 
@@ -330,19 +330,19 @@ const handleSave = async () => {
 
       {viewBatch && (
   <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-    <div className="bg-white p-6 rounded-lg max-w-xl w-full relative shadow-lg">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-xl w-full relative shadow-lg">
       <button
-        className="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-xl font-bold"
+        className="absolute top-3 right-3 text-gray-500 dark:text-gray-400 hover:text-red-600 text-xl font-bold"
         onClick={() => setViewBatch(null)}
       >
         &times;
       </button>
 
-      <h2 className="text-xl font-bold mb-4">{viewBatch.batchName}</h2>
-      <p><strong>Course:</strong> {viewBatch.course?.courseName}</p>
-      <p><strong>Start Date:</strong> {new Date(viewBatch.startDate).toLocaleDateString()}</p>
-      <p><strong>Student Count:</strong> {viewBatch.studentCount}</p>
-      <div className="mt-3">
+      <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">{viewBatch.batchName}</h2>
+      <p className="text-gray-700 dark:text-gray-300"><strong>Course:</strong> {viewBatch.course?.courseName}</p>
+      <p className="text-gray-700 dark:text-gray-300"><strong>Start Date:</strong> {new Date(viewBatch.startDate).toLocaleDateString()}</p>
+      <p className="text-gray-700 dark:text-gray-300"><strong>Student Count:</strong> {viewBatch.studentCount}</p>
+      <div className="mt-3 text-gray-700 dark:text-gray-300">
         <strong>Admins:</strong>
         {viewBatch.admins.map((a, i) => (
           <div key={i}>{a.module} - {a.admin?.name}</div>
@@ -355,23 +355,23 @@ const handleSave = async () => {
       {/* Batch Creation Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg max-w-xl w-full relative shadow-lg">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-xl w-full relative shadow-lg">
             <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-xl font-bold"
+              className="absolute top-3 right-3 text-gray-500 dark:text-gray-400 hover:text-red-600 text-xl font-bold"
               onClick={() => setShowModal(false)}
             >
               &times;
             </button>
-            <h2 className="text-xl font-bold mb-4">Create Batch</h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Create Batch</h2>
 
-            <div className="mb-4 p-2 bg-gray-100 rounded text-gray-800">
+            <div className="mb-4 p-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-800 dark:text-gray-200">
               <strong>Batch Name: </strong> {generatedBatchName || "Select course and date"}
             </div>
 
             <select
               onChange={e => handleCourseChange(e.target.value)}
               value={form.course}
-              className="border p-2 mb-4 w-full rounded"
+              className="border border-gray-300 dark:border-gray-600 p-2 mb-4 w-full rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="">Select Course</option>
               {courses.map(c => <option key={c._id} value={c._id}>{c.courseName}</option>)}
@@ -381,19 +381,19 @@ const handleSave = async () => {
               type="date"
               value={form.startDate}
               onChange={e => handleStartDateChange(e.target.value)}
-              className="border p-2 mb-4 w-full rounded"
+              className="border border-gray-300 dark:border-gray-600 p-2 mb-4 w-full rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
 
             {modules.map((mod, i) => (
               <div key={i} className="flex gap-2 mb-2">
-                <span className="w-1/3">{mod}</span>
+                <span className="w-1/3 text-gray-700 dark:text-gray-300">{mod}</span>
                 <select
                   onChange={(e) => {
                     const updated = [...form.admins];
                     updated[i] = { module: mod, admin: e.target.value };
                     setForm(f => ({ ...f, admins: updated }));
                   }}
-                  className="border p-1 flex-1 rounded"
+                  className="border border-gray-300 dark:border-gray-600 p-1 flex-1 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
                   <option value="">Select Admin</option>
                   {staff.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
@@ -403,7 +403,7 @@ const handleSave = async () => {
 
             <button
               onClick={handleSubmit}
-              className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4"
             >
               Create Batch
             </button>
@@ -414,15 +414,15 @@ const handleSave = async () => {
       
 {showModal2.show && (
   <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-    <div className="bg-white p-6 rounded-lg max-w-5xl w-full shadow-xl overflow-y-auto max-h-[90vh] relative">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-5xl w-full shadow-xl overflow-y-auto max-h-[90vh] relative">
       <button
-        className="absolute top-4 right-6 text-gray-500 text-2xl hover:text-red-600 font-bold"
+        className="absolute top-4 right-6 text-gray-500 dark:text-gray-400 text-2xl hover:text-red-600 font-bold"
         onClick={() => setShowModal2({ show: false, course: null, batchId: null })}
       >
         &times;
       </button>
 
-      <h2 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2">
+      <h2 className="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-6 flex items-center gap-2">
         <FaUserPlus /> Upload & Assign Students
       </h2>
 
@@ -444,9 +444,9 @@ const handleSave = async () => {
 
       {students.length > 0 && (
         <>
-          <div className="overflow-x-auto mb-6 rounded-xl border border-blue-100 shadow">
-            <table className="min-w-full text-sm text-gray-700">
-              <thead className="bg-blue-100 text-blue-900 text-xs uppercase tracking-wider">
+          <div className="overflow-x-auto mb-6 rounded-xl border border-blue-100 dark:border-gray-600 shadow">
+            <table className="min-w-full text-sm text-gray-700 dark:text-white">
+              <thead className="bg-blue-100 dark:bg-gray-700 text-blue-900 dark:text-gray-200 text-xs uppercase tracking-wider">
                 <tr>
                   <th className="p-4 text-left">Select</th>
                   <th className="p-4 text-left">Name</th>
@@ -454,13 +454,13 @@ const handleSave = async () => {
                   <th className="p-4 text-left">phone</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white dark:bg-gray-800">
                 {students.map((stu, i) => (
-                  <tr key={i} className="border-t border-gray-200 hover:bg-blue-50 transition">
+                  <tr key={i} className="border-t border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-700 transition">
                     <td className="p-4 text-center">
                       <input
                         type="checkbox"
-                        className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="w-5 h-5 text-blue-600 dark:text-blue-400 border-gray-300 rounded focus:ring-blue-500"
                         onChange={() => toggleSelect(stu.email)}
                         checked={!!selected[stu.email]}
                       />
