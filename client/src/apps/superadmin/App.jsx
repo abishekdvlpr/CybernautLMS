@@ -38,7 +38,8 @@ const AppContent = () => {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      <div className="flex-1 ml-64 flex flex-col">
+      <div className="flex flex-col flex-1 ml-64 min-h-screen">
+
         <Topbar pageTitle={pageTitle} />
         <ToastContainer position="top-right" autoClose={3000} />
         <main className="flex-1 overflow-y-auto">
