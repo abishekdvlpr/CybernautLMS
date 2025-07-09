@@ -9,6 +9,7 @@ import Payment from './components/payment';
 import AnalyticsPage from './components/analyticspage';
 import Courses from './components/courses';
 import Student from './components/student';
+import Certificate from './components/CertificatePage';
 import SuperAdminChat from './components/superadminchat';
 import PrivateRoute from './components/PrivateRoute';
 import Settings from './components/settings';
@@ -25,6 +26,7 @@ const routeTitles = {
   '/superadmin/analytics': 'Analytics',
   '/superadmin/communication': 'Communication',
   '/superadmin/settings': 'Settings',
+  '/superadmin/certificates':'Certificate'
 };
 
 
@@ -112,6 +114,14 @@ const AppContent = () => {
               element={
                 <PrivateRoute>
                   <Settings />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/certificates"
+              element={
+                <PrivateRoute>
+                  <Certificate />
                 </PrivateRoute>
               }
             />

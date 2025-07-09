@@ -16,7 +16,7 @@ const batchRoutes = require('./routes/batchroute.js');
 const uploadRoutes = require('./routes/uploadroute.js')
 const systemRoutes = require("./routes/system");
 const settingsRoutes = require("./routes/settingsroute.js");
-
+const certificateRoutes = require("./routes/certificateroute.js");
 const app = express();
 
 const allowedOrigins = [
@@ -54,6 +54,9 @@ app.use('/api/batches', batchRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use("/api/system", systemRoutes);
 app.use('/api/settings',settingsRoutes);
+
+app.use("/api/certificates", certificateRoutes);
+
 
 const PORT = process.env.PORT
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

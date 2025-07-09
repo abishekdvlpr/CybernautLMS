@@ -5,8 +5,10 @@ const studentSchema = new mongoose.Schema({
   batch: { type: mongoose.Schema.Types.ObjectId, ref: "Batch", required: true },
   phone: { type: String, required: true },
   address: { type: String, required: true },
-  dob: { type: Date, required: true }
-}, { timestamps: true });
+  dob: { type: Date, required: true },
+  certificate: { type: Boolean, default: false }
+}, { timestamps: true },
+);
 
 module.exports = mongoose.model('Student', studentSchema);
 

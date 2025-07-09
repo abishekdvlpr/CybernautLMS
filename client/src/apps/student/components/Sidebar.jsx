@@ -76,7 +76,7 @@ const Sidebar = ({ children, pageTitle }) => {
     <div className="flex h-screen bg-white dark:bg-black text-black dark:text-white">
       {/* Theme Toggle Button */}
       <div
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 cursor-pointer transition-all duration-300 hover:scale-110"
+        className="fixed left-1/2 transform -translate-x-1/2 z-50 cursor-pointer transition-all duration-300 hover:scale-110"
         onClick={() => setDarkMode(!darkMode)}
       >
         <div

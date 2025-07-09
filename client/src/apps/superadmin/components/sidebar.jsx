@@ -19,6 +19,8 @@ const menuItems = [
   { id: "communication", icon: <FaEnvelope />, label: "Communication", path: "/superadmin/communication" },
   { id: "analytics", icon: <FaChartPie />, label: "Analytics", path: "/superadmin/analytics" },
   { id: "setings", icon: <FaCog />, label: "Settings", path: "/superadmin/settings" },
+  { id: "certificates", icon: <FaChartBar />, label: "Certificates", path: "/superadmin/certificates" }
+
 ];
 
 
@@ -85,7 +87,7 @@ const handleLogout = async () => {
     <>
       {/* Theme Toggle Button */}
       <div
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 cursor-pointer transition-all duration-300 hover:scale-110"
+        className="fixed left-1/2 transform -translate-x-1/2 z-50 cursor-pointer transition-all duration-300 hover:scale-110"
         onClick={() => setDarkMode(!darkMode)}
       >
         <div

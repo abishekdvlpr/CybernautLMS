@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .certificate {
+      width: 1123px; /* A4 Landscape: 1123x794 at 96dpi */
+      height: 794px;
+      border: 10px solid #007BFF;
+      padding: 50px;
+      box-sizing: border-box;
+      font-family: 'Georgia', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .title {
+      font-size: 40px;
+      font-weight: bold;
+      color: #007BFF;
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .content {
+      text-align: center;
+      margin-top: 120px;
+    }
+
+    .certify {
+      font-size: 24px;
+      color: #555;
+    }
+
+    .name {
+      font-size: 36px;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 40px;
+      font-size: 16px;
+      color: #777;
+      text-align: center;
+    }
+
+    .signature {
+      margin-top: 60px;
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+    }
+
+    .signature div {
+      text-align: center;
+    }
+
+    .signature-line {
+      margin-top: 40px;
+      border-top: 1px solid #333;
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="certificate">
+    <div class="title">Cybernaut</div>
+
+    <div class="content">
+      <div class="certify">This is to certify that</div>
+      <div class="name">{{name}}</div>
+      <div class="certify">has successfully completed the program</div>
+    </div>
+
+    <div class="signature">
+      <div>
+        <div class="signature-line"></div>
+        <div>Instructor</div>
+      </div>
+      <div>
+        <div class="signature-line"></div>
+        <div>Director</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      © 2025 Cybernaut Corporation. All Rights Reserved.
+    </div>
+  </div>
+</body>
+</html>
