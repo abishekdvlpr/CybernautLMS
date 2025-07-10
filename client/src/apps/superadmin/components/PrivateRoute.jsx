@@ -5,6 +5,25 @@ const PrivateRoute = ({ children }) => {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const logout = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) return;
+
+    try {
+      await axios.post('http://localhost:5004/auth/logout', null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (err) {
+      console.error("Logout request failed:", err.message);
+    } finally {
+      localStorage.removeItem('token');
+      window.location.href = 'http://localhost:5173'; // redirect to login
+    }
+  };
+
   useEffect(() => {
     const verifyToken = async () => {
       const token = localStorage.getItem('token');
@@ -12,7 +31,7 @@ const PrivateRoute = ({ children }) => {
       if (!token) {
         setIsAuthenticated(false);
         setCheckingAuth(false);
-        window.location.href = 'http://localhost:5173'; // Redirect to login
+        window.location.href = 'http://localhost:5173'; // redirect to login
         return;
       }
 
@@ -25,9 +44,9 @@ const PrivateRoute = ({ children }) => {
 
         setIsAuthenticated(true);
       } catch (err) {
-        localStorage.removeItem('token');
-        setIsAuthenticated(false);
-        window.location.href = 'http://localhost:5173'; // Redirect to login
+        console.error("Token verification failed:", err.message);
+        await logout(); // logout if token is invalid or expired
+        return;
       } finally {
         setCheckingAuth(false);
       }

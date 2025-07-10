@@ -43,7 +43,7 @@ useEffect(() => {
   
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-full p-8">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-full p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-12">
@@ -51,14 +51,14 @@ useEffect(() => {
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               Welcome, Super Admin
             </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl">
+            <p className="text-xl text-gray-600 dark:text-gray-400 mb-4 max-w-3xl">
               Manage your institution's learning ecosystem from this central dashboard. Monitor performance, manage resources, and drive educational excellence.
             </p>
           </div>
         </div>
 
         {/* Metric Cards */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 mb-12">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center">
             <div className="w-3 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full mr-4"></div>
             System Statistics
