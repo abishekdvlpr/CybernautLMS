@@ -83,5 +83,23 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// GET /api/courses/modules - Get unique list of all modules
+router.get('/modules', async (req, res) => {
+  try {
+    const courses = await Course.find({}, 'modules'); // get only modules field
+
+    const moduleSet = new Set();
+    courses.forEach(course => {
+      (course.modules || []).forEach(mod => moduleSet.add(mod));
+    });
+
+    res.json(Array.from(moduleSet).sort()); // return sorted module list
+  } catch (err) {
+    console.error('Failed to fetch modules:', err.message);
+    res.status(500).json({ error: 'Failed to fetch modules' });
+  }
+});
+
+
 
 module.exports = router;

@@ -173,9 +173,9 @@ useEffect(() => {
 
 
   return (
-    <div className="p-0 m-0 flex h-[89vh] bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-white">
+    <div className="p-0 m-0 flex h-[92vh] bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-white">
       {/* Sidebar */}
-      <div className="w-1/3 h-[92vh] bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-r border-gray-200 dark:border-gray-700 p-6 overflow-y-auto shadow-lg">
+      <div className="w-1/3 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-r border-gray-200 dark:border-gray-700 p-6 overflow-y-auto shadow-lg">
         
 
         {/* Search Bar */}

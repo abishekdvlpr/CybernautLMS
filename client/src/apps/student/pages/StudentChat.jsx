@@ -89,9 +89,9 @@ export default function StudentChat() {
   if (!batchInfo) return <p className="text-center mt-6 text-gray-500 dark:text-gray-400">Loading chat...</p>;
 
   return (
-    <div className="flex h-[calc(100vh-6rem)] bg-gray-50 dark:bg-gray-900 overflow-hidden">
+    <div className="flex h-[92vh] bg-gray-50 dark:bg-gray-900 overflow-hidden">
       {/* Chat Window */}
-      <div className="flex-1 flex flex-col h-[calc(100vh-6rem)] bg-white dark:bg-gray-800">
+      <div className="flex-1 flex flex-col bg-white dark:bg-gray-800">
         {/* Enhanced Header - Fixed */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-700 px-6 py-4 border-b border-blue-700 flex-shrink-0">
           <div className="flex items-center justify-between">
@@ -123,18 +123,6 @@ export default function StudentChat() {
                   </p>
                 )}
               </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <button className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                </svg>
-              </button>
-              <button className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
-                </svg>
-              </button>
             </div>
           </div>
         </div>
@@ -181,9 +169,7 @@ export default function StudentChat() {
                       >
                         <p className="text-sm leading-relaxed">{text.join(": ")}</p>
                       </div>
-                      <span className="text-xs text-gray-400 dark:text-gray-500 mt-1 px-1">
-                        {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
+                      
                     </div>
                     {isSender && (
                       <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">
@@ -237,16 +223,16 @@ export default function StudentChat() {
       </div>
 
       {/* Enhanced Right Sidebar */}
-      <div className="w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-600 flex flex-col h-[calc(100vh-6rem)]">
+      <div className="w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-600 flex flex-col">
         {/* Sidebar Header - Fixed */}
-        <div className="p-6 border-b border-gray-200 dark:border-gray-600 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex-shrink-0">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center">
+        <div className="p-3 border-b border-gray-200 dark:border-gray-600 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex-shrink-0">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center mb-1">
             <svg className="w-5 h-5 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
               <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
             </svg>
             Chat Rooms
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Select a conversation</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Select a conversation</p>
         </div>
         
         {/* Sidebar Content - Scrollable */}
@@ -272,7 +258,7 @@ export default function StudentChat() {
                       <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
                     </svg>
                   </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                  
                 </div>
                 <div className="flex-1">
                   <div className="font-semibold text-base">Forum Chat</div>
@@ -319,7 +305,6 @@ export default function StudentChat() {
                           {adminName.split(' ').map(n => n[0]).join('').toUpperCase()}
                         </span>
                       </div>
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
                     </div>
                     <div className="flex-1">
                       <div className="font-semibold text-base">{adminName}</div>

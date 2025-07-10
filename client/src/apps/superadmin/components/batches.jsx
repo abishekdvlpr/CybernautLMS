@@ -32,7 +32,13 @@ const Batches = () => {
   useEffect(() => {
     fetchBatches();
     API.get("/api/courses").then(res => setCourses(res.data));
-    API.get("/api/users?role=admin").then(res => setStaff(res.data));
+    API.get("/api/admins")
+    .then(res => {
+      console.log("Received Admins", res.data); // <-- add this
+      setStaff(res.data);
+      console.log("Staff : ",staff);
+    })
+    .catch(err => console.error("Failed to fetch admins:", err));
   }, []);
 
   const fetchBatches = () => {
@@ -385,21 +391,27 @@ const handleSave = async () => {
             />
 
             {modules.map((mod, i) => (
-              <div key={i} className="flex gap-2 mb-2">
-                <span className="w-1/3 text-gray-700 dark:text-gray-300">{mod}</span>
-                <select
-                  onChange={(e) => {
-                    const updated = [...form.admins];
-                    updated[i] = { module: mod, admin: e.target.value };
-                    setForm(f => ({ ...f, admins: updated }));
-                  }}
-                  className="border border-gray-300 dark:border-gray-600 p-1 flex-1 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                >
-                  <option value="">Select Admin</option>
-                  {staff.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
-                </select>
-              </div>
-            ))}
+  <div key={i} className="flex gap-2 mb-2">
+    <span className="w-1/3 text-gray-700 dark:text-gray-300">{mod}</span>
+    <select
+      onChange={(e) => {
+        const updated = [...form.admins];
+        updated[i] = { module: mod, admin: e.target.value };
+        setForm(f => ({ ...f, admins: updated }));
+      }}
+      className="border border-gray-300 dark:border-gray-600 p-1 flex-1 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+    >
+      <option value="">Select Admin</option>
+      {staff
+        .filter(s => s.specialisation?.includes(mod))
+        .map(s => (
+          <option key={s._id} value={s._id}>{s.user.name}</option>
+
+        ))}
+    </select>
+  </div>
+))}
+
 
             <button
               onClick={handleSubmit}
