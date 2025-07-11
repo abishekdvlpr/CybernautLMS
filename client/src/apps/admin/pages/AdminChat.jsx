@@ -113,7 +113,7 @@ useEffect(() => {
       .toUpperCase();
 
   return (
-  <div className="relative w-full h-[88vh] flex overflow-hidden bg-white dark:bg-gray-900">
+  <div className="relative w-full h-[720px] flex overflow-hidden bg-white dark:bg-gray-900">
     
     {/* Chat Section */}
     <div className="flex-1 flex flex-col border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900">

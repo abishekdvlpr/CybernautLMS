@@ -43,12 +43,12 @@ useEffect(() => {
   
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-full p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4">
+      <div className="max-w-screen mx-auto">
         {/* Header Section */}
-        <div className="mb-12">
+        <div className="mb-10 ml-2">
           <div className="text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-3xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
               Welcome, Super Admin
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-4 max-w-3xl">
@@ -58,7 +58,7 @@ useEffect(() => {
         </div>
 
         {/* Metric Cards */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 mb-5">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center">
             <div className="w-3 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full mr-4"></div>
             System Statistics
@@ -69,28 +69,28 @@ useEffect(() => {
                 <FaUser className="text-white text-lg" />
               </div>
               <h3 className="text-sm text-blue-700 dark:text-blue-400 font-medium mb-2">Total Lecturers</h3>
-              <p className="text-3xl font-bold text-blue-700 dark:text-blue-300">{stats.totalLecturers}</p>
+              <p className="text-xl font-bold text-blue-700 dark:text-blue-300">{stats.totalLecturers}</p>
             </div>
             <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl p-6 text-center border border-green-200 dark:border-green-700">
               <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <FaFolderPlus className="text-white text-lg" />
               </div>
               <h3 className="text-sm text-green-700 dark:text-green-400 font-medium mb-2">Active Batches</h3>
-              <p className="text-3xl font-bold text-green-700 dark:text-green-300">{stats.activeBatches}</p>
+              <p className="text-xl font-bold text-green-700 dark:text-green-300">{stats.activeBatches}</p>
             </div>
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-xl p-6 text-center border border-purple-200 dark:border-purple-700">
               <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <FaUsers className="text-white text-lg" />
               </div>
               <h3 className="text-sm text-purple-700 dark:text-purple-400 font-medium mb-2">Total Students</h3>
-              <p className="text-3xl font-bold text-purple-700 dark:text-purple-300">{stats.totalStudents}</p>
+              <p className="text-xl font-bold text-purple-700 dark:text-purple-300">{stats.totalStudents}</p>
             </div>
           </div>
         </div>
 
 
         {/* Quick Actions */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 mb-12">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 mb-5">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center">
             <div className="w-3 h-8 bg-gradient-to-b from-green-500 to-green-600 rounded-full mr-4"></div>
             Quick Actions

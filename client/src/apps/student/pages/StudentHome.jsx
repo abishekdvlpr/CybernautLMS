@@ -112,7 +112,7 @@ function StudentHome() {
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-screen mx-auto">
         {/* Header Section */}
         <div className="mb-8">
           <div className="text-center md:text-left">
@@ -227,7 +227,7 @@ function StudentHome() {
 
             {/* Academic Performance */}
             {reports.length > 0 && (
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                   <div className="w-2 h-6 bg-red-500 rounded-full mr-3"></div>
                   Academic Performance
@@ -246,7 +246,8 @@ function StudentHome() {
                       </thead>
                     </table>
                   </div>
-                  <div className="max-h-80 overflow-y-auto">
+                  <div className="h-[280px] overflow-y-auto">
+
                     <table className="w-full text-sm">
                       <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
                         {[...reports]
@@ -300,7 +301,7 @@ function StudentHome() {
             </div>
 
             {/* Quick Stats */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 h-[300px]">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                 <div className="w-2 h-6 bg-teal-500 rounded-full mr-3"></div>
                 Quick Stats

@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
 
     const users = await User.find(filter).select('-password'); // exclude password
     res.json(users);
+    
   } catch (err) {
     console.error("Error fetching users:", err);
     res.status(500).json({ message: "Server error" });

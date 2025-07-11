@@ -16,22 +16,35 @@ export default function Admins() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    salary: '',
-    specialisation: '',
-    upi: '',
-    dob: ''
-  });
+  name: '',
+  email: '',
+  phone: '',
+  salary: '',
+  specialisation: [],
+  upi: '',
+  dob: ''
+});
+
   const [generatedPassword, setGeneratedPassword] = useState('');
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [adminToDelete, setAdminToDelete] = useState(null);
+  const [modules, setModules] = useState([]);
 
 
   useEffect(() => {
     fetchAdmins();
+    fetchModules();
   }, []);
+
+  const fetchModules = async () => {
+  try {
+    const res = await api.get('/api/courses/modules');
+    setModules(res.data); // ['Python', 'AI', 'Data Structures', ...]
+  } catch (err) {
+    toast.error("Failed to load modules");
+  }
+};
+
 
   const fetchAdmins = async () => {
     const res = await api.get('/api/admins');
@@ -69,7 +82,7 @@ const handleCancelDelete = () => {
     email: formData.email,
     phone: formData.phone,
     salary: formData.salary,
-    specialisation: formData.specialisation.split(',').map(s => s.trim()),
+    specialisation: formData.specialisation,
     upi: formData.upi,
     dob: formData.dob
   };
@@ -99,7 +112,7 @@ const handleCancelDelete = () => {
     email: admin.user?.email || '',
     phone: admin.phone || '',
     salary: admin.salary || '',
-    specialisation: (admin.specialisation || []).join(', '),
+    specialisation: admin.specialisation || [],
     upi: admin.upi || '',
     dob: admin.dob ? admin.dob.split('T')[0] : ''
   });
@@ -211,14 +224,26 @@ const handleCancelDelete = () => {
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
           required
         />
+        <div className="mb-2">
+  <label className="block text-gray-700 dark:text-white mb-1">Specialisation</label>
+  <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto border rounded p-2 dark:border-gray-600">
+    {modules.map((mod, i) => (
+      <label key={i} className="flex items-center space-x-2 text-sm text-gray-800 dark:text-white">
         <input
-          type="text"
-          placeholder="Specialisation (comma separated)"
-          className="w-full border px-4 py-2 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border-gray-300 dark:border-gray-600"
-          value={formData.specialisation}
-          onChange={(e) => setFormData({ ...formData, specialisation: e.target.value })}
-          required
+          type="checkbox"
+          checked={formData.specialisation.includes(mod)}
+          onChange={(e) => {
+            const newSpecs = e.target.checked
+              ? [...formData.specialisation, mod]
+              : formData.specialisation.filter(s => s !== mod);
+            setFormData({ ...formData, specialisation: newSpecs });
+          }}
         />
+        <span>{mod}</span>
+      </label>
+    ))}
+  </div>
+</div>
         <input
           type="text"
           placeholder="UPI"
