@@ -72,7 +72,8 @@ export default function EvaluateSubmissions() {
           <table className="w-full table-auto border border-gray-300 dark:border-gray-700 shadow-md">
             <thead className="bg-blue-100 dark:bg-gray-800">
               <tr>
-                <th className="p-3 border dark:border-gray-700">#</th>
+                
+                <th className="p-3 border dark:border-gray-700">Roll No</th>
                 <th className="p-3 border dark:border-gray-700">Student Name</th>
                 <th className="p-3 border dark:border-gray-700">Download Link</th>
                 <th className="p-3 border dark:border-gray-700">Marks</th>
@@ -85,8 +86,8 @@ export default function EvaluateSubmissions() {
                   key={index}
                   className="text-sm even:bg-gray-50 even:dark:bg-gray-800"
                 >
-                  <td className="p-3 border text-center dark:border-gray-700">
-                    {index + 1}
+                  <td className="p-3 border dark:border-gray-700">
+                    {sub.studentRoll}
                   </td>
                   <td className="p-3 border dark:border-gray-700">
                     {sub.studentName}

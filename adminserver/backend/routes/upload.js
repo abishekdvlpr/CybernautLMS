@@ -81,8 +81,8 @@ router.get('/assignment-question/:batch/:module/:title', (req, res) => {
   res.json({ url: s3Url });
 });
 
-router.post('/notes/upload/:batch/:module/:title/:student/:studentid/:day', upload.single('file'), async (req, res) => {
-  const { batch, module, title, student, studentid, day } = req.params;
+router.post('/notes/upload/:batch/:module/:title/:student/:studentid/:studentroll/:day', upload.single('file'), async (req, res) => {
+  const { batch, module, title, student, studentid,studentroll, day } = req.params;
 
   if (!req.file) return res.status(400).json({ error: 'No file' });
 
@@ -90,7 +90,7 @@ router.post('/notes/upload/:batch/:module/:title/:student/:studentid/:day', uplo
   const cleanModule = sanitizeForFolderName(module);
   const cleanTitle = sanitizeForFolderName(title);
 
-  const key = `${cleanBatch}/${cleanModule}/${cleanTitle}/assignment/${student}/answer.pdf`;
+  const key = `${cleanBatch}/${cleanModule}/${cleanTitle}/assignment/${student}_${studentroll}/answer.pdf`;
 
   try {
     // Upload to S3
@@ -162,11 +162,12 @@ router.get('/evaluate/:batchId/:module/:title/:day', async (req, res) => {
 
       // 5. Only include those not yet evaluated (assignment = marksObtained[2])
       if (!report || report.marksObtained[2] === -1) {
-        const answerKey = `${cleanBatch}/${cleanModule}/${cleanTitle}/assignment/${encodeURIComponent(student.user.name)}/answer.pdf`;
+        const answerKey = `${cleanBatch}/${cleanModule}/${cleanTitle}/assignment/${encodeURIComponent(student.user.name)}_${student.rollNo}/answer.pdf`;
 
         pending.push({
           studentId: student._id,
           studentName: student.user.name,
+          studentRoll : student.rollNo,
           answerLink: `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${answerKey}`
         });
       }

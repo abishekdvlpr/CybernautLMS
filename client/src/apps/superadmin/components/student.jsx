@@ -207,11 +207,11 @@ const filterStudents = () => {
         <table className="w-full text-sm text-left">
           <thead className="text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-600">
             <tr>
+              <th className="py-2">Roll No</th>
               <th className="py-2">Student Name</th>
               <th>Email</th>
               <th>Course</th>
               <th>Batch</th>
-              <th className="py-2">Roll No</th>
               <th>Phone</th>
               <th>DOB</th>
             </tr>
@@ -220,11 +220,11 @@ const filterStudents = () => {
   {filteredStudents.length > 0 ? (
     filteredStudents.map((student, idx) => (
       <tr key={idx} className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+        <td className="py-3 font-medium">{student.rollNo}</td>
         <td className="py-3">{student.user?.name}</td>
         <td>{student.user?.email}</td>
         <td>{student.course}</td>
         <td>{student.batch}</td>
-        <td className="py-3 font-medium">{student.rollNo}</td>
         <td>{student.phone}</td>
         <td>{new Date(student.dob).toLocaleDateString()}</td>
       </tr>
