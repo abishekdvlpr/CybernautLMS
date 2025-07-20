@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import api from "../api";
-import { FaVideo, FaQuestionCircle, FaFileAlt, FaUpload, FaCheckCircle } from 'react-icons/fa';
+import { FaVideo, FaQuestionCircle, FaFileAlt, FaUpload, FaCheckCircle, FaCode } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 export default function StudentBatch() {
@@ -13,6 +13,7 @@ export default function StudentBatch() {
   const [activeModule, setActiveModule] = useState(null);
   const [reports, setReports] = useState([]);
   const [quizzesMap, setQuizzesMap] = useState({});
+  const [codingQuestionsMap, setCodingQuestionsMap] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,6 +76,33 @@ export default function StudentBatch() {
             }
           }
         }
+
+        const codingMap = {};
+for (const module in allNotes) {
+  for (const note of [...allNotes[module].today, ...allNotes[module].others]) {
+    try {
+      const res = await api.get(`/api/coding-question/by-note/${note._id}`);
+      if (res.data?._id) {
+        const codingQuestion = res.data;
+
+        // Check if student has already submitted code
+        const token = localStorage.getItem("token");
+        const statusRes = await axios.get(
+          `http://localhost:5003/api/coding/submission-status/${note._id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        codingMap[note._id] = {
+          ...codingQuestion,
+          submitted: statusRes.data.submitted,
+        };
+      }
+    } catch {
+      console.warn("No coding question or submission status for this note");
+    }
+  }
+}
+setCodingQuestionsMap(codingMap);
 
         setNotesMap(allNotes);
         setQuizzesMap(quizMap);
@@ -159,6 +187,34 @@ export default function StudentBatch() {
               <FaQuestionCircle /> Attempt Quiz
             </button>
           )}
+
+          {codingQuestionsMap[note._id] ? (
+  codingQuestionsMap[note._id].submitted ? (
+    <button
+      disabled
+      className="flex items-center gap-2 text-sm px-4 py-2 rounded bg-green-500 text-white cursor-not-allowed"
+    >
+      <FaCheckCircle /> Submitted
+    </button>
+  ) : (
+    <button
+      onClick={() => navigate(`/student/code/attempt/${note._id}`)}
+      className="flex items-center gap-2 text-sm px-4 py-2 rounded bg-black text-white hover:bg-gray-800"
+    >
+      <FaCode /> Attempt Coding
+    </button>
+  )
+) : (
+  <button
+    disabled
+    className="flex items-center gap-2 text-sm px-4 py-2 rounded bg-gray-300 text-gray-700 cursor-not-allowed"
+  >
+    <FaCode /> No Coding Question
+  </button>
+)}
+
+
+          
 
           <button
             onClick={viewAssignment}

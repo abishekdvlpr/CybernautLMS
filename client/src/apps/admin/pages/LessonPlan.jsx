@@ -4,6 +4,8 @@ import axios from 'axios';
 import { FaPlus, FaEdit, FaFlask, FaLink, FaFilePdf } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import EvaluateCodeModal from '../components/EvaluateCodeModal';
+
 
 export default function LessonPlan() {
   const { batchId } = useParams();
@@ -21,6 +23,9 @@ export default function LessonPlan() {
   const [batchDetails, setBatchDetails] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submittingStudentId, setSubmittingStudentId] = useState(null);
+  const [showCodeEvalModal, setShowCodeEvalModal] = useState(false);
+const [codeEvalData, setCodeEvalData] = useState(null);
+
 
 
   const backendBase = 'http://localhost:5002';
@@ -88,6 +93,25 @@ export default function LessonPlan() {
       console.error("Failed to load submissions", err);
     }
   };
+
+  const openCodeEvalModal = async (note) => {
+  setCodeEvalData({ title: note.title, day: note.day, submissions: [] });
+  setShowCodeEvalModal(true);
+
+  try {
+    const res = await axios.get(
+      `http://localhost:5002/api/codeEval/${note._id}`, // ID of CodingQuestion
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    setCodeEvalData({ title: note.title, day: note.day, submissions: res.data });
+  } catch (err) {
+    console.error("Failed to load code submissions", err);
+    toast.error("Unable to load code evaluations");
+  }
+};
+
+
+
 
   const handleSubmit = async () => {
   if (!form.title || !form.day) return alert('Please fill title and day');
@@ -237,7 +261,7 @@ export default function LessonPlan() {
         onClick={() => openEvalModal(notes[0])}
         className="flex items-center justify-center gap-2 w-32 px-3 py-2 bg-black text-white rounded hover:bg-gray-800 text-sm"
       >
-        <FaFlask className="text-sm" /> Evaluate
+        <FaFlask className="text-sm" /> Evaluate Assignment
       </button>
       <button
         onClick={() => openModalForEdit(notes[0])}
@@ -245,7 +269,16 @@ export default function LessonPlan() {
       >
         <FaEdit className="text-sm" /> Edit
       </button>
+      <button
+  onClick={e => { e.stopPropagation(); openCodeEvalModal(notes[0]); }}
+  className="flex items-center justify-center gap-2 w-32 px-3 py-2 bg-black text-white rounded hover:bg-gray-800 text-sm"
+>
+  Evaluate Code
+</button>
     </div>
+
+    
+
   </div>
 )}
 
@@ -281,8 +314,16 @@ export default function LessonPlan() {
             onClick={e => { e.stopPropagation(); openEvalModal(note); }}
             className="flex items-center justify-center gap-2 w-32 px-3 py-2 bg-black text-white rounded hover:bg-gray-800 text-sm"
           >
-            <FaFlask className="text-sm" /> Evaluate
+            <FaFlask className="text-sm" /> Evaluate Assignment
           </button>
+
+          <button
+  onClick={e => { e.stopPropagation(); openCodeEvalModal(note); }}
+  className="flex items-center justify-center gap-2 w-32 px-3 py-2 bg-black text-white rounded hover:bg-gray-800 text-sm"
+>
+  Evaluate Code
+</button>
+
         </div>
       </div>
     </div>
@@ -312,6 +353,26 @@ export default function LessonPlan() {
           </div>
         </div>
       )}
+
+      {showCodeEvalModal && codeEvalData && (
+  <EvaluateCodeModal
+  batchId={batchId}
+  module={selectedModule}
+  day={codeEvalData.day}
+  title={codeEvalData.title}
+  submissions={codeEvalData.submissions}
+  onClose={() => setShowCodeEvalModal(false)}
+  refreshSubmissions={async () => {
+    const res = await axios.get(
+      `http://localhost:5002/api/codeEval/${codeEvalData.title}/${selectedModule}/${codeEvalData.day}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    setCodeEvalData(prev => ({ ...prev, submissions: res.data }));
+  }}
+/>
+
+)}
+
 
       {/* Add/Edit Note Modal */}
       {showModal && (
