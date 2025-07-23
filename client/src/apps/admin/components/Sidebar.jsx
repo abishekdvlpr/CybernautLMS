@@ -201,7 +201,9 @@ useEffect(() => {
 
         {showBatchSubmenu && selectedBatchId && (
           <div className="ml-8 mt-2 space-y-1">
+
             {["lesson-plan", "report", "quiz", "code", "batch-evaluation","chat"].map((item) => (
+
               <NavLink
                 key={item}
                 to={`/admin/batch/${selectedBatchId}/${item}`}

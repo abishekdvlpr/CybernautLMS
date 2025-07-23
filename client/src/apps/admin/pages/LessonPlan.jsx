@@ -87,7 +87,7 @@ export default function LessonPlan() {
 
   const openEvalModal = async (note) => {
     try {
-      const res = await axios.get(`${backendBase}/evaluate/${batchId}/${selectedModule}/${note.title}/${note.day}`);
+      const res = await axios.get(`http://localhost:5002/evaluate/${batchId}/${selectedModule}/${note.title}/${note.day}`);
       setEvalData({ title: note.title, day: note.day, submissions: res.data });
       setShowEvalModal(true);
     } catch (err) {
@@ -349,6 +349,7 @@ export default function LessonPlan() {
               <EvaluationTable
                 submissions={evalData.submissions}
                 handleEvaluate={handleEvaluate}
+                submittingStudentId={submittingStudentId}
               />
             )}
           </div>
@@ -402,9 +403,9 @@ export default function LessonPlan() {
   );
 }
 
-function EvaluationTable({ submissions, handleEvaluate }) {
+function EvaluationTable({ submissions, handleEvaluate ,submittingStudentId}) {
   const [marks, setMarks] = useState({});
-
+  
   return (
     <table className="w-full table-auto border border-gray-300 shadow">
       <thead className="bg-blue-100">
@@ -416,7 +417,7 @@ function EvaluationTable({ submissions, handleEvaluate }) {
           <th className="p-3 border">Action</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="text-black dark:text-white" >
         {submissions.map((sub, index) => (
           <tr key={index} className="text-sm">
             <td className="p-3 border text-center">{index + 1}</td>
@@ -424,7 +425,7 @@ function EvaluationTable({ submissions, handleEvaluate }) {
             <td className="p-3 border text-center">
               <a href={sub.answerLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">View PDF</a>
             </td>
-            <td className="p-3 border text-center dark:text-black">
+            <td className="p-3 border text-center text-black dark:text-black">
               <input
                 type="number"
                 min={0}
