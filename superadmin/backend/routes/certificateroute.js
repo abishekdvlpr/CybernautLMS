@@ -1,138 +1,98 @@
-const express = require('express');
-const router = express.Router();
-const Student = require('../models/Student');
-const Batch = require('../models/Batch');
-const Course = require('../models/Course');
-const Report = require('../models/Report');
-const BatchEvaluation = require('../models/BatchEvaluation');
-const { generatePDF } = require('../utils/generatePDF');
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-// ✅ Get eligible students
-router.get('/eligible', async (req, res) => {
-  try {
-    const students = await Student.find({ certificate: false }).populate('user');
-    const eligible = [];
+export default function CertificatePage() {
+  const [students, setStudents] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    
-
-    for (let student of students) {
-      const reports = await Report.find({ student: student._id });
-
-      // ❌ If any marks are -1, student is not eligible
-      //let ineligible = reports.some(r =>
-      //  r.marksObtained.some(mark => mark === -1)
-      //);
-      //if (ineligible) continue;*/
-
-      const evaluation = await BatchEvaluation.findOne({ batch: student.batch });
-      if (!evaluation) continue;
-
-      
-
-      const studentEval = evaluation.studentMarks.find(sm => sm.student.toString() === student._id.toString());
-      if (!studentEval) continue;
-
-      
-
-      if (studentEval.projectMarks === -1 || studentEval.theoryMarks === -1) continue;
-
-      // ✅ All checks passed, compute scores
-      let codingTotal = 0;
-      let quizTotal = 0;
-      let assignmentTotal = 0;
-
-      reports.forEach(r => {
-        codingTotal += r.marksObtained[0];
-        quizTotal += r.marksObtained[1];
-        assignmentTotal += r.marksObtained[2];
-      });
-
-      const totalMarks = codingTotal + quizTotal + assignmentTotal;
-      const normalizedScore = (totalMarks / 340) * 50;
-
-      const projectOutOf25 = (studentEval.projectMarks / 100) * 25;
-      const theoryOutOf25 = (studentEval.theoryMarks / 100) * 25;
-
-      const finalScore = normalizedScore + projectOutOf25 + theoryOutOf25;
-      console.log(`Final score for ${student.user.name}: ${finalScore}`);
-      if (finalScore >= 50) {
-        eligible.push(student);
+  useEffect(() => {
+    const fetchEligibleStudents = async () => {
+      try {
+        const res = await axios.get("http://localhost:5001/api/certificates/eligible");
+        setStudents(res.data);
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to fetch eligible students");
       }
+    };
+
+    fetchEligibleStudents();
+  }, []);
+
+  const toggleStudent = (id) => {
+    setSelected(prev =>
+      prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]
+    );
+  };
+
+  const handleGenerate = async () => {
+    if (selected.length === 0) {
+      toast.warn("No students selected");
+      return;
     }
 
-    res.json(eligible);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server Error');
-  }
-});
-
-// ✅ Generate certificates
-router.post('/generate', async (req, res) => {
-  try {
-    const { students } = req.body;
-
-    for (let id of students) {
-      const student = await Student.findById(id)
-        .populate('user')
-        .populate({
-          path: 'batch',
-          populate: { path: 'course', model: 'Course' }
-        });
-
-      if (!student || !student.user || !student.batch || !student.batch.course) {
-        console.warn(`Skipping student ID ${id} due to missing data`);
-        continue;
-      }
-
-      const reports = await Report.find({ student: student._id });
-
-      const ineligible = reports.some(r =>
-        r.marksObtained.some(mark => mark === -1)
-      );
-      if (ineligible) continue;
-
-      const evaluation = await BatchEvaluation.findOne({ batch: student.batch });
-      if (!evaluation) continue;
-
-      const studentEval = evaluation.studentMarks.find(sm => sm.student.toString() === student._id.toString());
-      if (!studentEval || studentEval.projectMarks === -1 || studentEval.theoryMarks === -1) continue;
-
-      let codingTotal = 0;
-      let quizTotal = 0;
-      let assignmentTotal = 0;
-
-      reports.forEach(r => {
-        codingTotal += r.marksObtained[0];
-        quizTotal += r.marksObtained[1];
-        assignmentTotal += r.marksObtained[2];
+    setLoading(true);
+    try {
+      await axios.post("http://localhost:5001/api/certificates/generate", {
+        students: selected
       });
-
-      const totalMarks = codingTotal + quizTotal + assignmentTotal;
-      const normalizedScore = (totalMarks / 340) * 50;
-
-      const projectOutOf25 = (studentEval.projectMarks / 100) * 25;
-      const theoryOutOf25 = (studentEval.theoryMarks / 100) * 25;
-
-      const finalScore = normalizedScore + projectOutOf25 + theoryOutOf25;
-      console.log(`Final score for ${student.user.name}: ${finalScore}`);
-      const name = student.user.name;
-      const email = student.user.email;
-      const courseName = student.batch.course.courseName;
-      const batchName = student.batch.batchName;
-      const rollNo = student._id;
-
-      await generatePDF(name, courseName, batchName, rollNo, email, student.batch.course.modules, finalScore);
-
-      student.certificate = true;
-      await student.save();
+      toast.success("Certificates generated and mailed!");
+      setStudents(prev => prev.filter(s => !selected.includes(s._id)));
+      setSelected([]);
+    } catch (err) {
+      console.error(err);
+      toast.error("Error generating certificates");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    res.status(200).json({ message: "Certificates generated and sent." });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error generating certificates');
-  }
-});
+  return (
+    <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">
+        Eligible Students for Certificate Generation
+      </h2>
 
-module.exports = router;
+      {students.length === 0 ? (
+        <p className="text-gray-700 dark:text-gray-300">No eligible students found. Ensure all admins have completed evaluations.</p>
+      ) : (
+        <>
+          <div className="space-y-2">
+            {students.map(student => (
+              <div
+                key={student._id}
+                className="flex items-center gap-4 p-3 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
+              >
+                <input
+                  type="checkbox"
+                  checked={selected.includes(student._id)}
+                  onChange={() => toggleStudent(student._id)}
+                  className="accent-blue-600 dark:accent-blue-400"
+                  disabled={loading}
+                />
+                <div className="text-gray-900 dark:text-white">
+                  <div className="font-medium">{student.user.name}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">{student.user.email}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            className={`mt-6 px-6 py-2 rounded text-white font-medium transition ${
+              loading
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-black hover:bg-gray-800'
+            }`}
+            onClick={handleGenerate}
+            disabled={loading || selected.length === 0}
+          >
+            {loading ? 'Generating...' : `Generate ${selected.length} Certificate${selected.length > 1 ? 's' : ''}`}
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
