@@ -12,9 +12,6 @@ const {
   ListObjectsV2Command
 } = require('@aws-sdk/client-s3');
 // AWS S3 config
-
-const { HeadObjectCommand } = require('@aws-sdk/client-s3');
-
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -149,63 +146,22 @@ router.get('/assignment-question/:batch/:module/:title', (req, res) => {
   res.json({ url: s3Url });
 });
 
-router.get('/project-theory/:batch', async (req, res) => {
+router.get('/project-theory/:batch', (req, res) => {
   const { batch } = req.params;
+  const cleanBatch = sanitizeForFolderName(batch);
 
-  try {
-    const batchDoc = await Batch.findById(batch);
-    if (!batchDoc) return res.status(404).json({ error: 'Batch not found' });
+  const projectKey = `${cleanBatch}/evaluation/project.pdf`;
+  const theoryKey = `${cleanBatch}/evaluation/theory.pdf`;
 
-    const cleanBatch = sanitizeForFolderName(batchDoc.batchName);
+  const s3Region = process.env.AWS_REGION;
+  const projectUrl = `https://${bucketName}.s3.${s3Region}.amazonaws.com/${projectKey}`;
+  const theoryUrl = `https://${bucketName}.s3.${s3Region}.amazonaws.com/${theoryKey}`;
 
-    const projectKey = `${cleanBatch}/project/FinalEvaluation.pdf`;
-    const theoryKey = `${cleanBatch}/theory/FinalEvaluation.pdf`; // ✅ Corrected path
-
-    const s3Region = process.env.AWS_REGION;
-    const projectUrl = `https://${bucketName}.s3.${s3Region}.amazonaws.com/${projectKey}`;
-    const theoryUrl = `https://${bucketName}.s3.${s3Region}.amazonaws.com/${theoryKey}`;
-
-    res.json({ projectUrl, theoryUrl });
-  } catch (err) {
-    console.error('Error fetching project/theory links:', err);
-    res.status(500).json({ error: 'Failed to fetch project/theory URLs' });
-  }
+  res.json({
+    projectUrl,
+    theoryUrl,
+  });
 });
-
-
-
-router.get('/check-project-upload', async (req, res) => {
-  const { batchName, studentName, rollNo } = req.query;
-
-  if (!batchName || !studentName || !rollNo) {
-    return res.status(400).json({ error: 'Missing required query parameters' });
-  }
-
-  try {
-    const cleanBatch = sanitizeForFolderName(batchName);
-    const cleanStudent = sanitizeForFolderName(studentName.trim());
-
-    const key = `${cleanBatch}/project/project_${cleanStudent}.pdf`;
-
-    // Check object existence using HeadObjectCommand
-    await s3.send(new HeadObjectCommand({
-      Bucket: bucketName,
-      Key: key
-    }));
-
-    const s3Url = `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
-    res.json({ exists: true, url: s3Url });
-
-  } catch (err) {
-    if (err.name === 'NotFound') {
-      return res.json({ exists: false });
-    }
-    console.error('S3 check error:', err);
-    res.status(500).json({ error: 'Failed to check project upload' });
-  }
-});
-
-
 
 router.post('/notes/upload/:batch/:module/:title/:student/:studentid/:studentroll/:day', upload.single('file'), async (req, res) => {
   const { batch, module, title, student, studentid, studentroll, day } = req.params;

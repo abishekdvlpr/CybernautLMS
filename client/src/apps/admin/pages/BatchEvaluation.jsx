@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { FaPlus, FaEdit, FaSave, FaUpload } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaUpload } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 export default function BatchEvaluation() {
@@ -12,94 +12,74 @@ export default function BatchEvaluation() {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     projectS3Url: '',
-    theoryS3Url: '',
     studentMarks: [],
   });
 
   const [projectFile, setProjectFile] = useState(null);
-  const [theoryFile, setTheoryFile] = useState(null);
-  const [batchDetails, setBatchDetails] = useState({ batchName: '', courseName: '' });
 
   const backendBase = 'http://localhost:5002/api';
 
   useEffect(() => {
-  if (batchId) {
-    fetchBatchDetails();
-  }
-}, [batchId]);
+    if (batchId) fetchEvaluation();
+  }, [batchId]);
 
-const fetchBatchDetails = async () => {
-  try {
-    const token = localStorage.getItem('token'); // or however you store JWT
-    const res = await axios.get(`${backendBase}/admin-batches/${batchId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const batch = res.data;
-    setBatchDetails({ batchName: batch.batchName, courseName: batch.course.courseName });
+  const fetchEvaluation = async () => {
+    try {
+      const evalRes = await axios.get(`${backendBase}/batch-evaluation/${batchId}`);
+      const studentMarksWithUrls = await Promise.all(
+        evalRes.data.studentMarks.map(async (s) => {
+          const answerUrls = await fetchAnswerUrls(s.student);
+          return {
+            ...s,
+            ...answerUrls,
+          };
+        })
+      );
 
-    fetchEvaluation(batch.batchName); // call evaluation fetch with batchName
-  } catch (err) {
-    toast.error('Failed to fetch batch details');
-  }
-};
-
-
-  const fetchEvaluation = async (batchNameParam) => {
-  try {
-    const evalRes = await axios.get(`${backendBase}/batch-evaluation/${batchId}`);
-    const studentMarksWithUrls = await Promise.all(
-      evalRes.data.studentMarks.map(async (s) => {
-        const answerUrls = await fetchAnswerUrls(s.student, batchNameParam);
-        return {
-          ...s,
-          ...answerUrls,
-        };
-      })
-    );
-
-    setEvaluation(evalRes.data);
-    setFormData({
-      projectS3Url: evalRes.data.projectS3Url || '',
-      theoryS3Url: evalRes.data.theoryS3Url || '',
-      studentMarks: studentMarksWithUrls || [],
-    });
-  } catch (err) {
-    if (err.response?.status === 404) {
-      setEvaluation(null);
-    } else {
-      toast.error('Failed to load evaluation');
+      setEvaluation(evalRes.data);
+      setFormData({
+        projectS3Url: evalRes.data.projectS3Url || '',
+        studentMarks: studentMarksWithUrls || [],
+      });
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setEvaluation(null);
+      } else {
+        toast.error('Failed to load evaluation');
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
+  const fetchAnswerUrls = async (student) => {
+    try {
+      const res = await axios.get(`${backendBase}/s3-answers`, {
+        params: {
+          batchName: batchId,
+          studentName: student.user?.name,
+          rollNo: student.rollNo,
+        },
+      });
 
-  const fetchAnswerUrls = async (student, batchName) => {
-  try {
-    const res = await axios.get(`${backendBase}/s3-answers`, {
-      params: {
-        batchName,
-        studentName: student.user?.name,
-        rollNo: student.rollNo,
-      },
-    });
+      const checkUrl = async (url) => {
+        try {
+          await axios.head(url);
+          return url;
+        } catch {
+          return null;
+        }
+      };
 
-    // URLs from backend are either valid or null
-    return {
-      projectAnswerUrl: res.data.projectAnswerUrl || null,
-      theoryAnswerUrl: res.data.theoryAnswerUrl || null,
-    };
-  } catch (err) {
-    console.error('Failed to fetch S3 answer URLs', err);
-    return {
-      projectAnswerUrl: null,
-      theoryAnswerUrl: null,
-    };
-  }
-};
-
-
+      const projectUrl = await checkUrl(res.data.projectAnswerUrl);
+      return {
+        projectAnswerUrl: projectUrl,
+      };
+    } catch (err) {
+      console.error('Failed to fetch S3 answer URLs', err);
+      return {};
+    }
+  };
 
   const createEvaluation = async () => {
     try {
@@ -111,50 +91,36 @@ const fetchBatchDetails = async () => {
     }
   };
 
- const handleMarksChange = (studentId, field, value) => {
-  const numericValue = Number(value);
+  const handleMarksChange = (studentId, field, value) => {
+    const updatedMarks = formData.studentMarks.map(s =>
+      s.student._id === studentId ? { ...s, [field]: value } : s
+    );
+    setFormData(prev => ({ ...prev, studentMarks: updatedMarks }));
+  };
 
-  if (numericValue > 100) {
-    toast.error("Marks cannot exceed 100");
-    const Marks = formData.studentMarks.map(s =>
-    s.student._id === studentId ? { ...s, [field]: 0 } : s
-  );
-    setFormData(prev => ({ ...prev, studentMarks: Marks }));
-    return;
-
-  }
-
-  const updatedMarks = formData.studentMarks.map(s =>
-    s.student._id === studentId ? { ...s, [field]: value } : s
-  );
-
-  setFormData(prev => ({ ...prev, studentMarks: updatedMarks }));
-};
-
-  const uploadFile = async (type) => {
-    const file = type === 'project' ? projectFile : theoryFile;
-    if (!file) return toast.error('No file selected');
+  const uploadFile = async () => {
+    if (!projectFile) return toast.error('No file selected');
 
     const formDataUpload = new FormData();
-    formDataUpload.append('file', file);
+    formDataUpload.append('file', projectFile);
 
     try {
       const res = await axios.post(
-        `http://localhost:5002/upload-${type}?batch=${batchId}&title=FinalEvaluation`,
+        `http://localhost:5002/upload-project?batch=${batchId}&title=FinalEvaluation`,
         formDataUpload,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
 
       const s3path = res.data.s3path;
-      setFormData(prev => ({ ...prev, [`${type}S3Url`]: s3path }));
+      setFormData(prev => ({ ...prev, projectS3Url: s3path }));
 
       await axios.put(`${backendBase}/batch-evaluation/${evaluation._id}`, {
-        [type === 'project' ? 'projectS3Url' : 'theoryS3Url']: s3path,
+        projectS3Url: s3path,
       });
 
-      toast.success(`${type === 'project' ? 'Project' : 'Theory'} file uploaded and updated`);
+      toast.success(`Project file uploaded and updated`);
     } catch (err) {
-      toast.error(`Failed to upload ${type}`);
+      toast.error(`Failed to upload project`);
     }
   };
 
@@ -162,11 +128,9 @@ const fetchBatchDetails = async () => {
     try {
       await axios.put(`${backendBase}/batch-evaluation/${evaluation._id}`, {
         projectS3Url: formData.projectS3Url,
-        theoryS3Url: formData.theoryS3Url,
         studentMarks: formData.studentMarks.map(s => ({
           student: s.student._id,
           projectMarks: s.projectMarks,
-          theoryMarks: s.theoryMarks,
         })),
       });
       toast.success('Evaluation updated');
@@ -203,7 +167,7 @@ const fetchBatchDetails = async () => {
               <>
                 <input type="file" accept=".pdf" className="mb-2" onChange={e => setProjectFile(e.target.files[0])} />
                 <button
-                  onClick={() => uploadFile('project')}
+                  onClick={uploadFile}
                   className="mb-2 px-2 py-1 bg-blue-600 text-white rounded flex items-center gap-2"
                 >
                   <FaUpload /> Upload Project PDF
@@ -233,21 +197,15 @@ const fetchBatchDetails = async () => {
                     <td>{s.student.user?.name}</td>
                     <td>
                       {editMode ? (
-  <input
-    type="number"
-    className="w-16 border p-1 rounded"
-    value={s.projectMarks === -1 ? '' : s.projectMarks}
-    min={0}
-    max={100}
-    onChange={e =>
-      handleMarksChange(s.student._id, 'projectMarks', e.target.value)
-    }
-    placeholder="NE"
-  />
-) : (
-  s.projectMarks === -1 ? 'NE' : s.projectMarks
-)}
-
+                        <input
+                          type="number"
+                          className="w-16 border p-1 rounded"
+                          value={s.projectMarks}
+                          onChange={e => handleMarksChange(s.student._id, 'projectMarks', e.target.value)}
+                        />
+                      ) : (
+                        s.projectMarks
+                      )}
                     </td>
                     <td>
                       {s.projectAnswerUrl ? (
@@ -262,94 +220,10 @@ const fetchBatchDetails = async () => {
                 ))}
               </tbody>
             </table>
-          </>
-        ) : (
-          <p className="text-gray-500">No evaluation added yet.</p>
-        )}
-      </div>
-
-      {/* Theory Evaluation Box */}
-      <div className="p-4 border rounded-xl shadow bg-white">
-        <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-semibold">Theory Evaluation</h2>
-          {evaluation && !editMode && (
-            <button onClick={() => setEditMode(true)} className="text-blue-600 hover:text-blue-800" title="Edit">
-              <FaEdit size={18} />
-            </button>
-          )}
-        </div>
-
-        {evaluation ? (
-          <>
-            {editMode && (
-              <>
-                <input type="file" accept=".pdf" className="mb-2" onChange={e => setTheoryFile(e.target.files[0])} />
-                <button
-                  onClick={() => uploadFile('theory')}
-                  className="mb-2 px-2 py-1 bg-blue-600 text-white rounded flex items-center gap-2"
-                >
-                  <FaUpload /> Upload Theory PDF
-                </button>
-              </>
-            )}
-
-            {formData.theoryS3Url && (
-              <a href={formData.theoryS3Url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline block mb-2">
-                View Uploaded Theory
-              </a>
-            )}
-
-            <table className="w-full text-sm">
-              <thead>
-                <tr>
-                  <th>Roll</th>
-                  <th>Name</th>
-                  <th>Marks</th>
-                  <th>Answer</th>
-                </tr>
-              </thead>
-              <tbody>
-                {formData.studentMarks.map(s => (
-                  <tr key={s.student._id} className="border-t">
-                    <td>{s.student.rollNo}</td>
-                    <td>{s.student.user?.name}</td>
-                    <td>
-                     {editMode ? (
-  <input
-    type="number"
-    className="w-16 border p-1 rounded"
-    value={s.theoryMarks === -1 ? '' : s.theoryMarks}
-    min={0}
-    max={100}
-    onChange={e => handleMarksChange(s.student._id, 'theoryMarks', e.target.value)}
-    placeholder="NE"
-  />
-) : (
-  <span>{s.theoryMarks === -1 ? 'NE' : s.theoryMarks}</span>
-)}
-
-
-                    </td>
-                    <td>
-                      {s.theoryAnswerUrl ? (
-                        <a href={s.theoryAnswerUrl} target="_blank" rel="noreferrer" className="text-blue-600 underline">
-                          View
-                        </a>
-                      ) : (
-                        <span className="text-gray-500">NU</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
 
             {editMode && (
-              <button
-                onClick={saveEvaluation}
-                className="mt-3 px-4 py-2 bg-black text-white rounded flex items-center gap-2"
-              >
-                <FaSave /> Save
+              <button onClick={saveEvaluation} className="mt-4 px-4 py-2 bg-green-600 text-white rounded">
+                Save Evaluation
               </button>
             )}
           </>

@@ -4,8 +4,9 @@ const Student = require('../models/Student');
 const Batch = require('../models/Batch');
 const Course = require('../models/Course');
 const Report = require('../models/Report');
-const BatchEvaluation = require('../models/BatchEvaluation');
 const { generatePDF } = require('../utils/generatePDF');
+const { sendMail } = require('../utils/sendMail');
+
 
 // ✅ Get eligible students
 // ✅ Modified GET /eligible route
@@ -165,6 +166,7 @@ router.post('/generate/batch/:batchId', async (req, res) => {
     if (!isBatchCompleted) {
       return res.status(400).send('Batch module evaluations not completed by all admins');
     }
+
 
     const evaluation = await BatchEvaluation.findOne({ batch: batchId });
     const students = await Student.find({ batch: batchId }).populate('user');

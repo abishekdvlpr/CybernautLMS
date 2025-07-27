@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+
 const EligibleStudentsPage = () => {
   const [data, setData] = useState([]);
   const [filteredBatch, setFilteredBatch] = useState('');
@@ -25,6 +26,7 @@ const EligibleStudentsPage = () => {
   const filteredData = filteredBatch
     ? data.filter(d => d.batch.id === filteredBatch)
     : data;
+
 
   if (loading) return <p className="p-4">Loading...</p>;
 
