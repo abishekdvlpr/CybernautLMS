@@ -5,7 +5,7 @@ const Report = require('../models/Report');
 const Quiz = require('../models/Quiz');
 const Note = require('../models/Note');
 const Student = require('../models/Student');
-
+const BatchEvaluation = require('../models/BatchEvaluation');
 // GET /api/quizreports/quiz-attempts — list all quiz attempts for student
 router.get('/quiz-attempts', Verify, async (req, res) => {
   try {
@@ -83,6 +83,8 @@ router.get('/quiz-detail/:noteId', Verify, async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+
 
 
 module.exports = router;

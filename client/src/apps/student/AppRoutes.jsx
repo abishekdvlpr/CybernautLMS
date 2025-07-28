@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
 import StudentHome from './pages/StudentHome';
 import StudentChat from './pages/StudentChat';
@@ -10,8 +10,8 @@ import AttemptQuiz from './pages/AttemptQuiz';
 import AttemptCoding from './pages/AttemptCoding';
 import ReportList from './pages/ReportList';
 import StudentProject from './pages/StudentProject';
-import StudentTheory from './pages/StudentTheory';
-
+import FinalAssignment from './pages/FinalAssignment';
+import FinalQuizAttempt from './pages/FinalQuiz';
 
 
 function AppRoutes() {
@@ -97,32 +97,42 @@ function AppRoutes() {
           element={
             <PrivateRoute>
               <Sidebar pageTitle="QuizReports">
-              <ReportList />
+                <ReportList />
               </Sidebar>
             </PrivateRoute>
           }
         />
-        <Route
-  path="/project"
-  element={
-    <PrivateRoute>
-      <Sidebar pageTitle="Project">
-        <StudentProject />
-      </Sidebar>
-    </PrivateRoute>
-  }
-/>
 
-<Route
-  path="/theory"
-  element={
-    <PrivateRoute>
-      <Sidebar pageTitle="Theory">
-        <StudentTheory />
-      </Sidebar>
-    </PrivateRoute>
-  }
-/>
+        <Route
+          path="/project"
+          element={
+            <PrivateRoute>
+              <Sidebar pageTitle="Project">
+                <StudentProject />
+              </Sidebar>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/theory"
+          element={
+            <PrivateRoute>
+              <Sidebar pageTitle="Theory">
+                <FinalAssignment />
+              </Sidebar>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/final-quiz/:module"
+          element={
+            <PrivateRoute>
+              <FinalQuizAttempt />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );

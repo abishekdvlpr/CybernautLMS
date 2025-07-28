@@ -16,6 +16,8 @@ const codingQuestionRoutes = require('./routes/codingQuestion');
 const codingRoutes = require('./routes/codingRoutes');
 const courseRoutes = require('./routes/course'); // ✅ Add this
 const projectRoutes = require("./routes/project");
+const finalQuizRoute = require('./routes/finalQuiz');
+
 const app = express();
 
 const allowedOrigins = [
@@ -57,6 +59,6 @@ app.use("/api/coding", codingRoutes);
 app.use('/api/courses', courseRoutes); // ✅ Add this
 
 app.use("/api/project", projectRoutes);
-
+app.use('/api/final-quiz', finalQuizRoute);
 
 app.listen(5003, () => console.log('Student server on 5003'));
