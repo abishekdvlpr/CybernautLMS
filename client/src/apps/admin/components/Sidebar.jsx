@@ -120,7 +120,7 @@ const Sidebar = ({ children }) => {
         >
           <FaBars size={24} />
         </button>
-        <div className="ml-4 text-lg font-semibold">{getPageTitle()}</div>
+        {/* <div className="ml-4 text-lg font-semibold">{getPageTitle()}</div> */} 
       </div>
 
       {/* Mobile Overlay */}
