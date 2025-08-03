@@ -32,12 +32,20 @@ app.use(cors({
 
 const server = http.createServer(app);
 const io = socketIO(server, {
-  cors: { 
-    origin: allowedOrigins,
+  cors: {
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow non-browser clients
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS (socket.io)'));
+      }
+    },
     methods: ['GET', 'POST'],
     credentials: true
   }
 });
+
 
 const PORT = 5006;
 const LOG_DIR = path.join(__dirname, 'chat_logs');
