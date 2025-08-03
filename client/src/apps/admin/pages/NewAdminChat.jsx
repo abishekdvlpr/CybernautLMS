@@ -4,7 +4,7 @@ import { FaPaperclip, FaSmile, FaPaperPlane, FaInfoCircle, FaBellSlash, FaTimes 
 import { io } from 'socket.io-client';
 import axios from 'axios';
 
-const socket = io("http://localhost:5006");
+const socket = io(`${import.meta.env.VITE_CHAT_API}`);
 
 const NewAdminChat = () => {
   const { batchId } = useParams();

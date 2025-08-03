@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5006");
+const socket = io(`${import.meta.env.VITE_CHAT_API}`);
 
 export default function SuperAdminChat() {
   const [sender, setSender] = useState("");

@@ -3,7 +3,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { FaBars, FaPaperPlane, FaPaperclip, FaSmile, FaComments, FaUser } from "react-icons/fa";
 
-const socket = io("http://localhost:5006");
+const socket = io(`${import.meta.env.VITE_CHAT_API}`);
 
 export default function StudentChat() {
   const [sender, setSender] = useState("");

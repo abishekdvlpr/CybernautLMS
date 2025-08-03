@@ -4,7 +4,7 @@ import API from "../api"; // Adjust the import based on your API setup
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 
-const socket = io("http://localhost:5006");
+const socket = io(`${import.meta.env.VITE_CHAT_API}`);
 
 export default function AdminChat() {
   const { batchId } = useParams();
