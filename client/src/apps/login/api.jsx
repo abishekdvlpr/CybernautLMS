@@ -21,7 +21,7 @@ API.interceptors.response.use(
     if (err.response && [401, 403].includes(err.response.status)) {
       // Clear session and redirect to login
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      window.location.href = 'https://cybernaut-lms-v2.onrender.com/login'; // redirect to login page
     }
     return Promise.reject(err);
   }
