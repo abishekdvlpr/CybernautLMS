@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API from "../api";
 import { FaPlayCircle } from "react-icons/fa";
 
 
@@ -10,7 +11,7 @@ const FinalAssignment = () => {
   useEffect(() => {
     const fetchModules = async () => {
       try {
-        const res = await axios.get("http://localhost:5003/api/final-quiz/available", {
+        const res = await API.get("/api/final-quiz/available", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setModules(res.data);

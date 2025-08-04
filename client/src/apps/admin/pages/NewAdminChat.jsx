@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import { FaPaperclip, FaSmile, FaPaperPlane, FaInfoCircle, FaBellSlash, FaTimes } from 'react-icons/fa';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import API from '../api'; // Adjust the import path as necessary
 
-const socket = io("http://localhost:5006");
+const socket = io(`${import.meta.env.VITE_CHAT_API}`);
 
 const NewAdminChat = () => {
   const { batchId } = useParams();
@@ -29,7 +30,7 @@ const NewAdminChat = () => {
     const fetchMyBatch = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5002/api/admin-batches/my-batches", {
+        const res = await API.get("/api/admin-batches/my-batches", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -56,7 +57,7 @@ const NewAdminChat = () => {
     const fetchStudents = async () => {
       try {
         const res = await axios.get(
-  `http://localhost:5006/students/${course}/${batch}/${encodeURIComponent(sender.trim())}`
+  `${import.meta.env.VITE_CHAT_API}/students/${course}/${batch}/${encodeURIComponent(sender.trim())}`
 );
 
 

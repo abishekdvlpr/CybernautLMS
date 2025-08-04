@@ -30,7 +30,7 @@ function StudentHome() {
 
         await new Promise(resolve => setTimeout(resolve, 800));
         
-        const res = await axios.get('http://localhost:5004/auth/student/me', {
+        const res = await axios.get(`${import.meta.env.VITE_LOGIN_API}/auth/student/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStudent(res.data);

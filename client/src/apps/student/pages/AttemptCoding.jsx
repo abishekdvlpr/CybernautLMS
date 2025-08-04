@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API from "../api"; // Adjust the import path as necessary
 import { toast } from "react-toastify";
 import Editor from "@monaco-editor/react"; // import Monaco Editor
 
@@ -42,7 +43,7 @@ const AttemptCodingQuestion = () => {
     const fetchQuestion = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`http://localhost:5003/api/coding/${noteId}`, {
+        const res = await API.get(`/api/coding/${noteId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setQuestion(res.data);

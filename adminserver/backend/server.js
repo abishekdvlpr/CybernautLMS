@@ -25,7 +25,9 @@ const courseRoutes = require("./routes/courseRoute");
 const s3AnswerCheckRoute = require('./routes/s3AnswerCheck');
 const app = express();
 const allowedOrigins = [
-  'http://localhost:5173'
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://cybernaut-lms-v2.onrender.com'
 ];
 
 app.use(cors({

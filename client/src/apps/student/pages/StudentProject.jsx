@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API from "../api";
 import { FaFileAlt, FaUpload, FaCheckCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 
@@ -31,7 +32,7 @@ export default function StudentProject() {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const studentRes = await axios.get("http://localhost:5004/auth/student/me", {
+        const studentRes = await axios.get(`${import.meta.env.VITE_LOGIN_API}/auth/student/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -39,16 +40,16 @@ export default function StudentProject() {
         setStudent(studentData);
         setBatch(studentData.batch);
 
-        const batchRes = await axios.get(`http://localhost:5003/student/batch/by-id/${studentData.batch}`);
+        const batchRes = await API.get(`/student/batch/by-id/${studentData.batch}`);
         const course = batchRes.data.course;
         setBatchName(batchRes.data.batchName);
 
-        const courseRes = await axios.get(`http://localhost:5003/api/courses/${course}`);
+        const courseRes = await API.get(`/api/courses/${course}`);
         const mods = courseRes.data.modules;
         setCourseModules(mods);
 
         // 🔁 Check existence via backend route
-        const res = await axios.post("http://localhost:5003/api/project/check-submissions", {
+        const res = await API.post("/api/project/check-submissions", {
           batchName: batchRes.data.batchName,
           studentName: studentData.user.name,
           rollNo: studentData.rollNo,
@@ -90,7 +91,7 @@ export default function StudentProject() {
 
     try {
       await axios.post(
-        `http://localhost:5002/upload-project?batch=${batch}&module=${module}&studentName=${student.user.name}&rollNo=${student.rollNo}`,
+        `${import.meta.env.VITE_ADMIN_API}/upload-project?batch=${batch}&module=${module}&studentName=${student.user.name}&rollNo=${student.rollNo}`,
         fd
       );
       toast.success("Project submitted!");

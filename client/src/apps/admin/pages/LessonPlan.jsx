@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import API from '../api'; // Adjust the import based on your API setup
 import { FaPlus, FaEdit, FaFlask, FaLink, FaFilePdf } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,12 +26,12 @@ export default function LessonPlan() {
   const [submitting, setSubmitting] = useState(false);
   const [submittingStudentId, setSubmittingStudentId] = useState(null);
 
-  const backendBase = 'http://localhost:5002';
+  
   const token = localStorage.getItem('token');
 
   const fetchBatchModule = useCallback(async () => {
     try {
-      const res = await axios.get(`${backendBase}/api/admin-batches/${batchId}`, {
+      const res = await API.get(`/api/admin-batches/${batchId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const batch = res.data;
@@ -54,7 +55,7 @@ export default function LessonPlan() {
   const fetchNotes = useCallback(async () => {
     if (!selectedModule) return;
     try {
-      const res = await axios.get(`${backendBase}/notes/${batchId}/${selectedModule}`, {
+      const res = await API.get(`/notes/${batchId}/${selectedModule}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const sorted = res.data.sort((a, b) => b.day - a.day);
@@ -83,7 +84,7 @@ export default function LessonPlan() {
 
   const openEvalModal = async (note) => {
     try {
-      const res = await axios.get(`http://localhost:5002/evaluate/${batchId}/${selectedModule}/${note.title}/${note.day}`);
+      const res = await API.get(`/evaluate/${batchId}/${selectedModule}/${note.title}/${note.day}`);
       setEvalData({ title: note.title, day: note.day, submissions: res.data });
       setShowEvalModal(true);
     } catch (err) {
@@ -93,7 +94,7 @@ export default function LessonPlan() {
 
   const openCodeEvalModal = async (noteId) => {
     try {
-      const res = await axios.get(`http://localhost:5002/api/codeEval/${noteId}`);
+      const res = await API.get(`/api/codeEval/${noteId}`);
       setCodeEvalData({
         noteId: noteId,
         submissions: res.data,
@@ -115,8 +116,8 @@ export default function LessonPlan() {
         const fd = new FormData();
         fd.append('file', pdfFile);
 
-        const uploadRes = await axios.post(
-          `${backendBase}/upload-assignment?batch=${batchId}&module=${selectedModule}&title=${form.title}`,
+        const uploadRes = await API.post(
+          `/upload-assignment?batch=${batchId}&module=${selectedModule}&title=${form.title}`,
           fd,
           {
             headers: {
@@ -137,11 +138,11 @@ export default function LessonPlan() {
       };
 
       if (editingNoteId) {
-        await axios.put(`${backendBase}/notes/${editingNoteId}`, payload, {
+        await API.put(`/notes/${editingNoteId}`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        await axios.post(`${backendBase}/notes`, payload, {
+        await API.post(`/notes`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
@@ -170,13 +171,13 @@ export default function LessonPlan() {
 
     setSubmittingStudentId(studentId);
     try {
-      await axios.post(`${backendBase}/evaluate`, {
+      await API.post(`/evaluate`, {
         studentId,
         module: selectedModule,
         day: evalData.day,
         mark
       });
-      const res = await axios.get(`http://localhost:5002/evaluate/${batchId}/${selectedModule}/${evalData.title}/${evalData.day}`);
+      const res = await API.get(`/evaluate/${batchId}/${selectedModule}/${evalData.title}/${evalData.day}`);
       setEvalData(prev => ({ ...prev, submissions: res.data }));
     } catch (err) {
       console.error("Error submitting marks", err);

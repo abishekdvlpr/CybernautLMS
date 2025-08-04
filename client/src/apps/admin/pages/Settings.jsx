@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import API from "../api"; // Adjust the import based on your API setup
 import { toast } from "react-toastify";
 
 const Settings = () => {
@@ -29,7 +30,7 @@ const Settings = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5002/api/settings/me", {
+        const res = await API.get("/api/settings/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setForm(res.data);
@@ -47,7 +48,7 @@ const Settings = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put("http://localhost:5002/api/settings/me", form, {
+      await API.put("/api/settings/me", form, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Profile updated successfully!");
@@ -61,8 +62,8 @@ const Settings = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post(
-        "http://localhost:5002/api/settings/add-skill",
+      const res = await API.post(
+        "/api/settings/add-skill",
         { skill: newSkill.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -96,7 +97,7 @@ const Settings = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        "http://localhost:5004/auth/change-password",
+        `${import.meta.env.VITE_LOGIN_API}/auth/change-password`,
         passwordForm,
         { headers: { Authorization: `Bearer ${token}` } }
       );

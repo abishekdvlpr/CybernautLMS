@@ -3,10 +3,11 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { FaSearch, FaUserCircle, FaUsers, FaComments, FaBars, FaArrowLeft } from "react-icons/fa";
 
-const socket = io("http://localhost:5006");
-const sender = "superadmin";
 
 const SuperAdminChat = () => {
+
+  
+  const sender = "superadmin";
   const [courseFilter, setCourseFilter] = useState("All");
   const [filterType, setFilterType] = useState("all");
   const [forumRooms, setForumRooms] = useState([]);
@@ -27,17 +28,29 @@ const SuperAdminChat = () => {
       ? `admins/${encodeURIComponent(selectedTarget.trim())}`
       : null;
 
+    const [socket, setSocket] = useState(null);
+
+useEffect(() => {
+  const newSocket = io(import.meta.env.VITE_CHAT_API); // or your API URL
+  setSocket(newSocket);
+
+  return () => {
+    newSocket.disconnect();
+  };
+}, []);
+
+
   // Fetch Forum Rooms
   useEffect(() => {
     const fetchForumChats = async () => {
       try {
-        const { data: courses } = await axios.get("http://localhost:5006/chatrooms");
+        const { data: courses } = await axios.get(`${import.meta.env.VITE_CHAT_API}/chatrooms`);
         const allRooms = [];
 
         for (let rawCourse of courses) {
           if (rawCourse !== 'admins') {
             const course = decodeURIComponent(rawCourse);
-            const batchListRes = await axios.get(`http://localhost:5006/chatrooms/${encodeURIComponent(course)}`);
+            const batchListRes = await axios.get(`${import.meta.env.VITE_CHAT_API}/chatrooms/${encodeURIComponent(course)}`);
             const batches = batchListRes.data;
             batches.forEach((batch) => {
               allRooms.push({
@@ -68,11 +81,11 @@ const SuperAdminChat = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const res = await axios.get("http://localhost:5006/chatrooms/admins");
+        const res = await axios.get(`${import.meta.env.VITE_CHAT_API}/chatrooms/admins`);
         const cleaned = res.data.map((name) => decodeURIComponent(name));
         setAdmins(cleaned);
 
-        const statusRes = await axios.get("http://localhost:5006/chatrooms/admins/status");
+        const statusRes = await axios.get(`${import.meta.env.VITE_CHAT_API}/chatrooms/admins/status`);
         const statusMap = {};
         statusRes.data.forEach(({ name, online }) => {
           statusMap[name] = online;
@@ -110,7 +123,7 @@ const SuperAdminChat = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const statusRes = await axios.get("http://localhost:5006/chatrooms/admins/status");
+        const statusRes = await axios.get(`${import.meta.env.VITE_CHAT_API}/chatrooms/admins/status`);
         const statusMap = {};
         statusRes.data.forEach(({ name, online }) => {
           statusMap[name] = online;

@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import AdminLayout from "../components/AdminLayout";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import API from "../api"; // Adjust the import based on your API setup
 
 const ReportPage = () => {
   const { batchId } = useParams();
@@ -19,7 +20,7 @@ const ReportPage = () => {
 
   const fetchReports = async () => {
     try {
-      const res = await axios.get(`http://localhost:5002/api/reports/batch/${batchId}`, {
+      const res = await API.get(`/api/reports/batch/${batchId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -15,6 +15,7 @@ import {
   FaCode,
   FaBars,
 } from "react-icons/fa";
+import axios from "axios";
 import API from "../api";
 import { toast } from "react-toastify";
 import Topbar from "./Topbar";
@@ -82,13 +83,13 @@ const Sidebar = ({ children }) => {
     const token = localStorage.getItem("token");
     try {
       await axios.post(
-        "http://localhost:5004/auth/logout",
+        `${import.meta.env.VITE_LOGIN_API}/auth/logout`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
       localStorage.removeItem("token");
       toast.success("Logged out");
-      window.location.href = "http://localhost:5173";
+      window.location.href = `${import.meta.env.VITE_FRONTEND_URL}`;
     } catch (error) {
       console.error("Logout failed:", error);
     }
