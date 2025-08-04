@@ -58,7 +58,7 @@ export default function StudentBatch() {
     const fetchStudent = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5004/auth/student/me', {
+        const res = await axios.get(`${import.meta.env.VITE_LOGIN_API}/auth/student/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStudent(res.data);
@@ -127,8 +127,8 @@ export default function StudentBatch() {
                 const codingQuestion = res.data;
 
                 // Fetch submission status only when student is available
-                const statusRes = await axios.get(
-                  `http://localhost:5003/api/coding/submission-status/${note._id}/${student._id}`,
+                const statusRes = await API.get(
+                  `/api/coding/submission-status/${note._id}/${student._id}`,
                   { headers: { Authorization: `Bearer ${token}` } }
                 );
 
@@ -187,7 +187,7 @@ export default function StudentBatch() {
 
     const viewAssignment = async () => {
       try {
-        const res = await axios.get(`http://localhost:5002/assignment-question/${encodeURIComponent(batch.batchName)}/${encodeURIComponent(module)}/${encodeURIComponent(note.title)}`);
+        const res = await axios.get(`${import.meta.env.VITE_ADMIN_API}/assignment-question/${encodeURIComponent(batch.batchName)}/${encodeURIComponent(module)}/${encodeURIComponent(note.title)}`);
         if (res.data?.url) {
           window.open(res.data.url, '_blank');
         } else {
@@ -396,7 +396,7 @@ export default function StudentBatch() {
 
                   try {
                     await axios.post(
-                      `http://localhost:5002/notes/upload/${encodeURIComponent(batch.batchName)}/${module}/${encodeURIComponent(note.title)}/${encodeURIComponent(student.user.name)}/${student._id}/${student.rollNo}/${note.day}`,
+                      `${import.meta.env.VITE_ADMIN_API}/notes/upload/${encodeURIComponent(batch.batchName)}/${module}/${encodeURIComponent(note.title)}/${encodeURIComponent(student.user.name)}/${student._id}/${student.rollNo}/${note.day}`,
                       fd
                     );
                     toast.success('Answer uploaded successfully');

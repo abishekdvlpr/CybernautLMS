@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API from "../api"; // Adjust the import based on your API setup
+import { toast } from "react-toastify";
 import AdminLeaderboard from "./AdminLeaderboard";
 
 export default function StudentList() {
@@ -38,7 +40,7 @@ export default function StudentList() {
 
   const fetchStudents = async () => {
     try {
-      const res = await axios.get("http://localhost:5002/api/students/my-students", {
+      const res = await API.get("/api/students/my-students", {
         headers: { Authorization: `Bearer ${token}` },
         params: {
           name: search,
@@ -84,8 +86,8 @@ export default function StudentList() {
 
   useEffect(() => {
     if (leaderboardModule && leaderboardBatchId) {
-      axios
-        .get("http://localhost:5002/statistics/leaderboard", {
+      API
+        .get("/statistics/leaderboard", {
           headers: { Authorization: `Bearer ${token}` },
           params: { module: leaderboardModule, batchId: leaderboardBatchId },
           withCredentials: true,

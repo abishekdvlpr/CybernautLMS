@@ -23,8 +23,7 @@ export default function Topbar({ pageTitle = "Dashboard", adminName = "Admin", d
         {/* Right: Actions and User Info */}
         <div className="flex items-center gap-4">
           
-          {/* Theme Toggle */}
-          <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+          
           
           {/* Notifications */}
           <div className="relative">

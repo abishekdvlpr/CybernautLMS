@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API from "../api"; // Adjust the import path as necessary
 import { FaClipboardList, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 
@@ -41,13 +42,13 @@ const ReportList = () => {
         setLoading(true);
         const token = localStorage.getItem("token");
 
-        const profileRes = await axios.get("http://localhost:5004/auth/student/me", {
+        const profileRes = await axios.get(`${import.meta.env.VITE_LOGIN_API}/auth/student/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const studentId = profileRes.data._id;
 
-        const res = await axios.get(
-          `http://localhost:5003/api/quizreports/quiz-attempts?studentId=${studentId}`,
+        const res = await API.get(
+          `/api/quizreports/quiz-attempts?studentId=${studentId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -80,8 +81,8 @@ const ReportList = () => {
   const openModal = async (noteId) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `http://localhost:5003/api/quizreports/quiz-detail/${noteId}`,
+      const res = await API.get(
+        `/api/quizreports/quiz-detail/${noteId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSelectedReport(noteId);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API from "../api"; // Adjust the import path as necessary
 import { toast } from "react-toastify";
 
 const FinalQuiz = () => {
@@ -18,7 +19,7 @@ const FinalQuiz = () => {
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        const res = await axios.get(`http://localhost:5003/api/final-quiz/${module}`, {
+        const res = await API.get(`/api/final-quiz/${module}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setQuiz(res.data);
@@ -58,8 +59,8 @@ const FinalQuiz = () => {
   const handleSubmit = async () => {
     try {
       setSubmitting(true);
-      await axios.post(
-        `http://localhost:5003/api/final-quiz/submit/${module}`,
+      await API.post(
+        `/api/final-quiz/submit/${module}`,
         { answers },
         { headers: { Authorization: `Bearer ${token}` } }
       );

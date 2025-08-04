@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5003', // your backend URL
+  baseURL: import.meta.env.VITE_STUDENT_API, // your backend URL
 });
 
 // Add token to headers

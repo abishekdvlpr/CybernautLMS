@@ -15,7 +15,7 @@ export default function SuperAdminChat() {
     const fetchAdmin = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5004/auth/admin/me", {
+        const res = await axios.get(`${import.meta.env.VITE_LOGIN_API}/auth/admin/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const name = res.data.user.name;

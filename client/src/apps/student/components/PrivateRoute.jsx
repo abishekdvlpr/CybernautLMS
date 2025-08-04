@@ -12,12 +12,12 @@ const PrivateRoute = ({ children }) => {
       if (!token) {
         setIsAuthenticated(false);
         setCheckingAuth(false);
-        window.location.href = 'http://localhost:5173'; // Redirect to login
+        window.location.href = import.meta.env.VITE_FRONTEND_URL; // Redirect to login
         return;
       }
 
       try {
-        await axios.get('http://localhost:5004/auth/verify', {
+        await axios.get(`${import.meta.env.VITE_LOGIN_API}/auth/verify`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -27,7 +27,7 @@ const PrivateRoute = ({ children }) => {
       } catch (err) {
         localStorage.removeItem('token');
         setIsAuthenticated(false);
-        window.location.href = 'http://localhost:5173'; // Redirect to login
+        window.location.href = `${import.meta.env.VITE_FRONTEND_URL}`; // Redirect to login
       } finally {
         setCheckingAuth(false);
       }

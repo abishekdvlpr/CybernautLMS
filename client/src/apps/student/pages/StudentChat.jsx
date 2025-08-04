@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import API from "../api";
 import { io } from "socket.io-client";
 import { FaBars, FaPaperPlane, FaPaperclip, FaSmile, FaComments, FaUser } from "react-icons/fa";
 
@@ -19,13 +20,13 @@ export default function StudentChat() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const studentRes = await axios.get("http://localhost:5004/auth/student/me", {
+        const studentRes = await axios.get(`${import.meta.env.VITE_LOGIN_API}/auth/student/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setSender(studentRes.data.user.name);
 
         const batchId = new URLSearchParams(window.location.search).get("batch");
-        const batchRes = await axios.get(`http://localhost:5003/student/batch/by-id/${batchId}`);
+        const batchRes = await API.get(`/student/batch/by-id/${batchId}`);
         setBatchInfo(batchRes.data);
         setActiveChat({ type: "forum" });
       } catch (err) {

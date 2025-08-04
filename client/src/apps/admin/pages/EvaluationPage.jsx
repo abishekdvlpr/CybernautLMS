@@ -12,7 +12,7 @@ export default function EvaluateSubmissions() {
 
   const fetchSubmissions = async () => {
     try {
-      const res = await axios.get(`${backendBase}/evaluate/${batch}/${module}/${title}/${day}`);
+      const res = await API.get(`/evaluate/${batch}/${module}/${title}/${day}`);
       setSubmissions(res.data);
     } catch (err) {
       console.error('Failed to load submissions:', err);
@@ -38,7 +38,7 @@ export default function EvaluateSubmissions() {
     }
 
     try {
-      await axios.post(`${backendBase}/evaluate`, {
+      await API.post(`/evaluate`, {
         studentId,
         module,
         day,

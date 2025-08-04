@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API from "../api"; // Adjust the import path as necessary
 import {toast} from "react-toastify";
 
 const AttemptQuiz = () => {
@@ -17,7 +18,7 @@ const AttemptQuiz = () => {
     const fetchQuiz = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`http://localhost:5003/api/quiz/${noteId}`, {
+        const res = await API.get(`/api/quiz/${noteId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setQuiz(res.data);
@@ -86,8 +87,8 @@ const AttemptQuiz = () => {
     setSubmitting(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.post(
-        `http://localhost:5003/api/quiz/submit/${noteId}`,
+      await API.post(
+        `/api/quiz/submit/${noteId}`,
         { answers },
         { headers: { Authorization: `Bearer ${token}` } }
       );

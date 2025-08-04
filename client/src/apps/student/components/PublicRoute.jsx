@@ -9,7 +9,7 @@ const PublicRoute = ({ children }) => {
 
     if (token) {
       // Optional: verify token via API here
-      window.location.href = "http://localhost:5173"; // full redirect
+      window.location.href = import.meta.env.VITE_FRONTEND_URL; // full redirect
     } else {
       setCanRender(true);
     }
