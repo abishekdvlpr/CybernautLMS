@@ -180,6 +180,8 @@ export default function StudentBatch() {
 
   const getQuizMark = (module, day) => {
     const match = reports.find(r => r.module === module && r.day === day);
+    console.log("Quiz mark match:", match);
+    console.log("Quiz mark:", match?.marksObtained?.[1]);
     return match ? match.marksObtained?.[1] ?? -2 : -2;
   };
 
