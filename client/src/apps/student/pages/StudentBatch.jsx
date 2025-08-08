@@ -76,9 +76,11 @@ export default function StudentBatch() {
         if (!student) return; // ⛳ wait for student before proceeding
         setLoading(true);
 
-        const res = await api.get(`/student/batch/by-id/${batchId}`);
+        const res = await api.get(`/student/batch/by-id/${batchId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
         setBatch(res.data);
-
+        console.log("Batch data:", res.data);
         const token = localStorage.getItem('token');
         const allNotes = {};
         let latestModule = null;
@@ -108,7 +110,9 @@ export default function StudentBatch() {
         for (const module in allNotes) {
           for (const note of [...allNotes[module].today, ...allNotes[module].others]) {
             try {
-              const res = await api.get(`/api/quiz/by-note/${note._id}`);
+              const res = await api.get(`/api/quiz/by-note/${note._id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              });
               if (res.data?._id) {
                 quizMap[note._id] = res.data;
               }
@@ -129,7 +133,7 @@ export default function StudentBatch() {
                 const codingQuestion = res.data;
 
                 // Fetch submission status only when student is available
-                const statusRes = await API.get(
+                const statusRes = await api.get(
                   `/api/coding/submission-status/${note._id}/${student._id}`,
                   { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -163,7 +167,10 @@ export default function StudentBatch() {
     const fetchReports = async () => {
       try {
         if (!student?._id) return;
-        const res = await api.get(`/api/reports/${student._id}`);
+        const token = localStorage.getItem('token');
+        const res = await api.get(`/api/reports/${student._id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setReports(res.data);
       } catch (err) {
         console.error("Error fetching reports:", err);
@@ -191,7 +198,11 @@ export default function StudentBatch() {
 
     const viewAssignment = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_ADMIN_API}/assignment-question/${encodeURIComponent(batch.batchName)}/${encodeURIComponent(module)}/${encodeURIComponent(note.title)}`);
+        const token = localStorage.getItem('token');
+        const res = await axios.get(
+          `${import.meta.env.VITE_ADMIN_API}/assignment-question/${encodeURIComponent(batch.batchName)}/${encodeURIComponent(module)}/${encodeURIComponent(note.title)}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
         if (res.data?.url) {
           window.open(res.data.url, '_blank');
         } else {
@@ -399,9 +410,11 @@ export default function StudentBatch() {
                   fd.append('file', note.file);
 
                   try {
+                    const token = localStorage.getItem('token');
                     await axios.post(
                       `${import.meta.env.VITE_ADMIN_API}/notes/upload/${encodeURIComponent(batch.batchName)}/${module}/${encodeURIComponent(note.title)}/${encodeURIComponent(student.user.name)}/${student._id}/${student.rollNo}/${note.day}`,
-                      fd
+                      fd,
+                      { headers: { Authorization: `Bearer ${token}` } }
                     );
                     toast.success('Answer uploaded successfully');
                   } catch (err) {
