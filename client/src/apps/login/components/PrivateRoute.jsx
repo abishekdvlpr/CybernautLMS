@@ -35,6 +35,7 @@ const PrivateRoute = () => {
         // Token invalid or expired
         console.error('Token invalid:', err);
         localStorage.clear();
+        await new Promise(resolve => setTimeout(resolve, 8000));
         window.location.href = `${import.meta.env.VITE_FRONTEND_URL}/login`;
       }
     };

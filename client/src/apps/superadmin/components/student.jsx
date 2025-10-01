@@ -76,6 +76,8 @@ const Student = () => {
   const [filteredBatches, setFilteredBatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchStudents();
@@ -228,6 +230,7 @@ const filterStudents = () => {
   if (loading) return <StudentSkeleton />;
 
   return (
+    <>
     <SlideUp className="p-2 sm:p-4 bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-[90%]">
       <FadeIn delay={100}>
         <div className="flex justify-between items-center mb-6">
@@ -325,26 +328,26 @@ const filterStudents = () => {
               <th className="whitespace-nowrap">Email</th>
               <th>Course</th>
               <th>Batch</th>
-              <th>Phone</th>
-              <th>DOB</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 dark:text-gray-300">
   {filteredStudents.length > 0 ? (
     filteredStudents.map((student, idx) => (
-      <tr key={idx} className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+      <tr
+        key={idx}
+        className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+        onClick={() => { setSelectedStudent(student); setIsModalOpen(true); }}
+      >
         <td className="py-3 font-medium">{student.rollNo}</td>
         <td className="py-3">{student.user?.name}</td>
         <td>{student.user?.email}</td>
         <td>{student.course}</td>
         <td>{student.batch}</td>
-        <td>{student.phone}</td>
-        <td>{new Date(student.dob).toLocaleDateString()}</td>
       </tr>
     ))
   ) : (
     <tr>
-      <td colSpan="7" className="text-center py-4 text-gray-500 dark:text-gray-400">
+      <td colSpan="5" className="text-center py-4 text-gray-500 dark:text-gray-400">
         No students found.
       </td>
     </tr>
@@ -357,27 +360,86 @@ const filterStudents = () => {
         <div className="md:hidden grid grid-cols-1 gap-4 mt-4">
           {filteredStudents.length > 0 ? (
             filteredStudents.map((student, idx) => (
-              <div key={idx} className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between items-center mb-2">
+              <div
+                key={idx}
+                onClick={() => { setSelectedStudent(student); setIsModalOpen(true); }}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700 cursor-pointer hover:ring-2 hover:ring-blue-400/60 transition"
+              >
+                <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-gray-900 dark:text-white">Roll No: {student.rollNo}</span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">{new Date(student.dob).toLocaleDateString()}</span>
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
                 </div>
                 <p className="text-lg font-bold text-blue-600 dark:text-blue-400 mb-1">{student.user?.name}</p>
                 <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">{student.user?.email}</p>
                 <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">Course: {student.course}</p>
-                <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">Batch: {student.batch}</p>
-                <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {student.phone}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">Batch: {student.batch}</p>
               </div>
             ))
           ) : (
-            <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-              No students found.
-            </div>
+            <div className="text-center py-4 text-gray-500 dark:text-gray-400">No students found.</div>
           )}
         </div>
       </div>
     </SlideUp>
+    {isModalOpen && selectedStudent && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => { setIsModalOpen(false); setSelectedStudent(null); }}>
+        <div
+          className="bg-white dark:bg-gray-800 w-full max-w-lg rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-[fadeIn_.25s_ease]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex justify-between items-center px-5 py-4 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Student Details</h3>
+            <button
+              onClick={() => { setIsModalOpen(false); setSelectedStudent(null); }}
+              className="text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 transition"
+              aria-label="Close"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="p-5 space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="h-14 w-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl font-bold">
+                {selectedStudent.user?.name?.charAt(0) || '?' }
+              </div>
+              <div>
+                <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-100">{selectedStudent.user?.name}</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{selectedStudent.user?.email}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <Info label="Roll No" value={selectedStudent.rollNo} />
+              <Info label="Course" value={selectedStudent.course} />
+              <Info label="Batch" value={selectedStudent.batch} />
+              <Info label="Phone" value={selectedStudent.phone || '-'} />
+              <Info label="DOB" value={selectedStudent.dob ? new Date(selectedStudent.dob).toLocaleDateString() : '-'} />
+              {selectedStudent.github && <Info label="GitHub" value={<a href={selectedStudent.github} target="_blank" rel="noopener" className="text-blue-600 dark:text-blue-400 underline">Profile</a>} />}
+              {selectedStudent.linkedin && <Info label="LinkedIn" value={<a href={selectedStudent.linkedin} target="_blank" rel="noopener" className="text-blue-600 dark:text-blue-400 underline">Profile</a>} />}
+            </div>
+          </div>
+          <div className="px-5 py-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex justify-end">
+            <button
+              onClick={() => { setIsModalOpen(false); setSelectedStudent(null); }}
+              className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 };
+
+// Small helper component for consistent info row layout
+const Info = ({ label, value }) => (
+  <div className="text-sm">
+    <p className="text-gray-500 dark:text-gray-400 font-medium">{label}</p>
+    <p className="text-gray-800 dark:text-gray-200 mt-0.5 break-all">{value || '-'}</p>
+  </div>
+);
 
 export default Student;

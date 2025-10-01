@@ -6,7 +6,9 @@ const studentSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   address: { type: String, required: true },
   dob: { type: Date, required: true },
-  certificate: { type: Boolean, default: false }
+  certificate: { type: Boolean, default: false },
+  github: { type: String, default: "" },
+  linkedin: { type: String, default: "" }
 }, { timestamps: true },
 );
 
