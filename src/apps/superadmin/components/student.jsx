@@ -532,41 +532,55 @@ const Student = () => {
         {/* Summary Cards */}
         <FadeIn delay={200}>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-            <div className="bg-white dark:bg-gray-800 rounded shadow p-4 text-center border dark:border-gray-700 hover:shadow-lg transition-shadow">
-              <h4 className="text-sm text-gray-500 dark:text-gray-400">
-                Total Students
-              </h4>
-              <p className="text-xl font-semibold text-gray-900 dark:text-white">
-                {students.length}
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded shadow p-4 text-center border dark:border-gray-700 hover:shadow-lg transition-shadow">
-              <h4 className="text-sm text-gray-500 dark:text-gray-400">
-                Total Batches
-              </h4>
-              <p className="text-xl font-semibold text-gray-900 dark:text-white">
-                {uniqueBatches.length}
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded shadow p-4 text-center border dark:border-gray-700 hover:shadow-lg transition-shadow">
-              <h4 className="text-sm text-gray-500 dark:text-gray-400">
-                Total Courses
-              </h4>
-              <p className="text-xl font-semibold text-gray-900 dark:text-white">
-                {uniqueCourses.length}
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded shadow p-4 text-center border dark:border-gray-700 hover:shadow-lg transition-shadow">
-              <h4 className="text-sm text-gray-500 dark:text-gray-400">
-                Active Batches
-              </h4>
-              <p className="text-xl font-semibold text-gray-900 dark:text-white">
-                {
-                  batches.filter((b) => new Date(b.startDate) <= new Date())
-                    .length
-                }
-              </p>
-            </div>
+            {[
+              {
+                label: "Total Students",
+                value: students.length,
+                icon: "👨‍🎓",
+                bg: "bg-blue-50 dark:bg-blue-900/30",
+                border: "border-blue-200 dark:border-blue-700",
+                text: "text-blue-700 dark:text-blue-300",
+              },
+              {
+                label: "Total Batches",
+                value: uniqueBatches.length,
+                icon: "🏫",
+                bg: "bg-green-50 dark:bg-green-900/30",
+                border: "border-green-200 dark:border-green-700",
+                text: "text-green-700 dark:text-green-300",
+              },
+              {
+                label: "Total Courses",
+                value: uniqueCourses.length,
+                icon: "📚",
+                bg: "bg-purple-50 dark:bg-purple-900/30",
+                border: "border-purple-200 dark:border-purple-700",
+                text: "text-purple-700 dark:text-purple-300",
+              },
+              {
+                label: "Active Batches",
+                value: batches.filter((b) => new Date(b.startDate) <= new Date()).length,
+                icon: "✅",
+                bg: "bg-yellow-50 dark:bg-yellow-900/30",
+                border: "border-yellow-200 dark:border-yellow-700",
+                text: "text-yellow-700 dark:text-yellow-300",
+              },
+            ].map((card, i) => (
+              <div
+                key={i}
+                className={`rounded-xl border p-4 shadow-sm flex items-center gap-3 hover:shadow-md transition-shadow ${card.bg} ${card.border}`}
+              >
+                <span className="text-3xl">{card.icon}</span>
+                <div>
+                  <h4 className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                    {card.label}
+                  </h4>
+                  <p className={`text-2xl font-bold ${card.text}`}>
+                    {card.value}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </FadeIn>
 
@@ -641,15 +655,15 @@ const Student = () => {
           {/* Table View - Desktop */}
           <div className="overflow-x-auto hidden md:block">
             <table className="w-full text-sm text-left">
-              <thead className="text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-600">
+              <thead className="bg-blue-600 text-white text-sm">
                 <tr>
-                  <th className="py-2 px-2">Roll No</th>
-                  <th className="py-2 px-2">Student Name</th>
-                  <th className="py-2 px-2">Email</th>
-                  <th className="py-2 px-2">Phone</th>
-                  <th className="py-2 px-2">Course</th>
-                  <th className="py-2 px-2">Batch</th>
-                  <th className="py-2 px-2 text-center">Actions</th>
+                  <th className="py-3 px-3 text-left">Roll No</th>
+                  <th className="py-3 px-3 text-left">Student Name</th>
+                  <th className="py-3 px-3 text-left">Email</th>
+                  <th className="py-3 px-3 text-left">Phone</th>
+                  <th className="py-3 px-3 text-left">Course</th>
+                  <th className="py-3 px-3 text-left">Batch</th>
+                  <th className="py-3 px-3 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="text-gray-700 dark:text-gray-300">
@@ -657,16 +671,26 @@ const Student = () => {
                   filteredStudents.map((student, idx) => (
                     <tr
                       key={idx}
-                      className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      className={`border-t border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors ${
+                        idx % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800"
+                      }`}
                     >
-                      <td className="py-3 px-2 font-medium">
+                      <td className="py-3 px-3 font-medium text-blue-700 dark:text-blue-300">
                         {student.rollNo}
                       </td>
-                      <td className="py-3 px-2">{student.user?.name}</td>
-                      <td className="py-3 px-2">{student.user?.email}</td>
-                      <td className="py-3 px-2">{student.phone || "-"}</td>
-                      <td className="py-3 px-2">{student.course}</td>
-                      <td className="py-3 px-2">{student.batch}</td>
+                      <td className="py-3 px-3 font-semibold text-gray-800 dark:text-white">{student.user?.name}</td>
+                      <td className="py-3 px-3 text-gray-600 dark:text-gray-300">{student.user?.email}</td>
+                      <td className="py-3 px-3">{student.phone || "-"}</td>
+                      <td className="py-3 px-3">
+                        <span className="bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 text-xs font-semibold px-2 py-1 rounded-full">
+                          {student.course}
+                        </span>
+                      </td>
+                      <td className="py-3 px-3">
+                        <span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 text-xs font-semibold px-2 py-1 rounded-full">
+                          {student.batch}
+                        </span>
+                      </td>
                       <td className="py-3 px-2">
                         <div className="flex justify-center gap-2">
                           <button

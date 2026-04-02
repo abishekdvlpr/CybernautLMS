@@ -238,12 +238,12 @@ const Payment = () => {
 
         {/* STATS */}
 
-        <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 
-          <StatCard title="Modules" value={stats.totalAdmins} />
-          <StatCard title="Total Spent" value={`₹${stats.totalSpent}`} />
-          <StatCard title="Paid" value={stats.paidCount} />
-          <StatCard title="Pending" value={stats.pendingCount} />
+          <StatCard title="Modules" value={stats.totalAdmins} icon="📋" bg="bg-blue-50 dark:bg-blue-900/30" border="border-blue-200 dark:border-blue-700" text="text-blue-700 dark:text-blue-300" />
+          <StatCard title="Total Spent" value={`₹${stats.totalSpent.toLocaleString()}`} icon="💰" bg="bg-purple-50 dark:bg-purple-900/30" border="border-purple-200 dark:border-purple-700" text="text-purple-700 dark:text-purple-300" />
+          <StatCard title="Paid" value={stats.paidCount} icon="✅" bg="bg-green-50 dark:bg-green-900/30" border="border-green-200 dark:border-green-700" text="text-green-700 dark:text-green-300" />
+          <StatCard title="Pending" value={stats.pendingCount} icon="⏳" bg="bg-yellow-50 dark:bg-yellow-900/30" border="border-yellow-200 dark:border-yellow-700" text="text-yellow-700 dark:text-yellow-300" />
 
         </div>
 
@@ -298,17 +298,16 @@ const Payment = () => {
 
                 return (
 
-                  <tr key={index} className="border-b">
+                  <tr key={index} className={`border-b transition-colors hover:bg-blue-50 dark:hover:bg-gray-700 ${index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800"}`}>
 
-                    <td className="p-4 font-semibold">{row.name}</td>
+                    <td className="p-4 font-semibold text-gray-800 dark:text-white">{row.name}</td>
 
-                    <td className="p-4">{row.batchName}</td>
+                    <td className="p-4"><span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 text-xs font-semibold px-2 py-1 rounded-full">{row.batchName}</span></td>
 
-                    <td className="p-4">{row.module}</td>
+                    <td className="p-4"><span className="bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 text-xs font-semibold px-2 py-1 rounded-full">{row.module}</span></td>
 
-                    <td className="p-4 flex items-center gap-1 font-semibold">
-                      <FaRupeeSign />
-                      {row.salary?.toLocaleString() || 0}
+                    <td className="p-4 font-bold text-blue-700 dark:text-blue-300">
+                      <span className="flex items-center gap-1"><FaRupeeSign />{row.salary?.toLocaleString() || 0}</span>
                     </td>
 
                     <td className="p-4">
@@ -358,10 +357,13 @@ const Payment = () => {
 };
 
 
-const StatCard = ({ title, value }) => (
-  <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-    <p className="text-sm text-gray-500">{title}</p>
-    <p className="text-xl font-bold">{value}</p>
+const StatCard = ({ title, value, icon, bg, border, text }) => (
+  <div className={`rounded-xl border p-4 shadow-sm flex items-center gap-3 hover:shadow-md transition-shadow ${bg} ${border}`}>
+    <span className="text-3xl">{icon}</span>
+    <div>
+      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{title}</p>
+      <p className={`text-2xl font-bold ${text}`}>{value}</p>
+    </div>
   </div>
 );
 
