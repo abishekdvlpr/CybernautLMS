@@ -5,7 +5,7 @@ import path from 'path';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/CybernautLMS/', // 🔁 better for SPAs and static deploys
+ base: './', // 🔁 better for SPAs and static deploys
   plugins: [
     react(),
     VitePWA({
